@@ -2,7 +2,7 @@
 
 > 우리의 집안일, 우리의 몫
 > 기준일 2026-11-05. 원본 기획은 [SUPER_PROMPT.md](SUPER_PROMPT.md), 원본과 달라진 점은 [DECISIONS.md](DECISIONS.md)에 있습니다.
-> 이 문서는 설계입니다. 아직 앱 코드는 없습니다.
+> 단계 1(배정 엔진)까지 구현했습니다. 화면과 DB는 아직 없으며, 나머지 구조는 계획입니다.
 
 ## 1. 한눈에 보기
 
@@ -84,6 +84,7 @@ OurShare/
 │   │   │   ├── plan-week.ts           # 진입점
 │   │   │   ├── balanced-assign.ts     # 후보 탐색과 비용 계산
 │   │   │   ├── seeded-random.ts
+│   │   │   ├── shares.ts              # 비율 검증·재분배·반올림
 │   │   │   ├── load-history.ts        # 최근 4주 부담 보정
 │   │   │   └── explain.ts             # 결과 설명 코드
 │   │   ├── scheduling/

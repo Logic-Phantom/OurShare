@@ -1,0 +1,40 @@
+{
+  "name": "ourshare",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "simulate": "jest tests/simulation --verbose"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "testMatch": [
+      "**/tests/unit/**/*.test.ts",
+      "**/tests/simulation/**/*.test.ts",
+      "**/tests/integration/**/*.test.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/assets/(.*)$": "<rootDir>/assets/$1",
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  },
+  "dependencies": {
+    "expo": "~58.0.23",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "^58.0.4",
+    "jest": "^30.5.2",
+    "jest-expo": "^58.0.14",
+    "typescript": "^6.0.3"
+  }
+}
