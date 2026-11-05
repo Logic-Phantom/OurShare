@@ -1,0 +1,65 @@
+# 결정 기록
+
+슈퍼프롬프트를 검토해 바꾸거나 보완한 내용입니다. 기준일은 2026-11-05입니다.
+
+## 슈퍼프롬프트 수정
+
+| ID | 원문 | 결정 | 이유 |
+|---|---|---|---|
+| D-001 | 라우트는 `app/` | `src/app/` | 기존 앱과 같은 배치. 라우트와 코드를 `src/` 한곳에 모음 |
+| D-002 | `allocation-policy.ts`가 세 곳에 언급됨 | `domain/allocation/allocation-policy.ts` 한 곳 | 가중치를 한곳에서 관리한다는 원문 취지를 지키려면 하나여야 함 |
+| D-003 | seed와 비율을 집 단위 `WeeklyAllocationSettings`에 저장 | 주 단위 `week_plan`과 `week_plan_target`으로 분리 | seed와 비율은 주마다 달라짐. 집 단위로 저장하면 지난주 결과를 재현할 수 없음 |
+| D-004 | 중복 생성을 `generationId`로 방지 | `UNIQUE(household_id, week_start_date)` | DB 제약이 더 단순하고 확실함 |
+| D-005 | `WeeklyFairnessSnapshot` 테이블 | 만들지 않고 일정에서 계산 | 완료를 되돌릴 때마다 같이 고쳐야 해 어긋나기 쉬움 |
+| D-006 | Repository 인터페이스로 로컬과 원격을 교체 | 서비스가 값을 읽어 순수 함수에 전달. 리포지토리는 SQLite 구현만 | 로컬 우선이면 원격이 저장소를 대체하지 않음. 원격은 동기화 경로로 추가 |
+| D-007 | 삭제 방식 언급 없음 | 공유 대상 테이블에 처음부터 `deleted_at` 포함 | 나중에 동기화할 때 삭제를 전파하려면 필요 |
+| D-008 | iOS 우선 실기기 테스트 | Android 실기기 먼저, iOS는 EAS와 TestFlight | 개발 PC에 Mac이 없음 |
+| D-009 | 공유 모드가 출시 전 Phase 4 | 로컬 앱을 먼저 출시하고 공유는 이후. 그전에는 일정 텍스트 공유 제공 | 인증·RLS·계정 삭제·국외 이전 고지가 함께 필요해 범위가 크게 늘어남. Supabase Free는 활동이 적으면 일시 중지되므로 가정용 서비스에 위험. **확인 필요** |
+| D-010 | 온보딩 8단계 | 소개 → 집과 구성원 → 비율 → 집안일 → 첫 주 미리보기 | 시안의 3단계 표시와 "1분 안에 설정" 목표에 맞춤. 시간·알림 세부 설정은 나중에 |
+| D-011 | `package-lock.json` 기준 전체 의존성 라이선스 보고서 | 출시 번들 소스맵과 직접 의존성 기준으로 감사 (기존 앱 스크립트 재사용) | 빌드 도구까지 섞이지 않고 실제 배포되는 패키지를 고지할 수 있음 |
+| D-012 | 완료 업무까지 포함한 "모든 자동 배정 다시 하기" | 넣지 않음. 완료를 먼저 취소하면 재배정 대상이 됨 | 완료 기록을 실수로 지울 위험을 없애고 화면을 단순화 |
+
+## 슈퍼프롬프트 누락 보완
+
+| ID | 빠진 내용 | 결정 |
+|---|---|---|
+| D-020 | 시안의 "오늘 오후 8시"와 온보딩의 "시간"에 해당하는 필드가 없음 | `due_time` 추가 |
+| D-021 | "업무별 알림" 설정 필드가 없음 | `reminder_mode` 추가 (없음 / 당일 / 전날 저녁) |
+| D-022 | 시안의 알림함 화면이 없음 | `activity_event` 테이블과 화면 추가. 기기 안의 기록이며 푸시가 아님 |
+| D-023 | 다시 배정해도 결과가 같을 수 있음 | 원문 §3.6 예시는 비율에 가까운 조합이 하나뿐임(아래 참고). 같은 결과를 숨기지 않고 "지금 조건에서는 이 조합이 목표에 가장 가까워요"라고 안내 |
+| D-024 | 같은 사람이 같은 일을 계속 맡는 것을 막는 항이 비용식에 없음 | `choreRepeatPenalty` 추가 |
+| D-025 | 정렬 후 순차 배정만으로는 동점이 없으면 항상 같은 결과가 나옴 | seed로 후보 여러 개를 만들고 허용 범위 안에서 선택 ([알고리즘](ALLOCATION_ALGORITHM.md)) |
+| D-026 | 주 시작 요일을 바꿀 때의 처리 없음 | 확정된 주는 유지하고 다음 생성부터 적용 |
+| D-027 | 일요일 일을 "다음 날로 미루면" 주가 바뀜 | 부담은 원래 주에 계산하고, 화면은 실제 날짜에 표시. `original_local_date` 보존 |
+| D-028 | MANUAL 담당자를 정하지 않은 경우 | "담당자 미정"으로 확정 가능. 비율 계산에서 제외하고 별도 표시 |
+| D-029 | 비율 표시 반올림으로 합이 99%나 101%가 됨 | 최대 잔여법으로 표시 합을 100에 맞춤 |
+| D-030 | 지난 부담 계산 기준이 불명확 | 실제 한 일 기준. DONE은 완료한 사람, TODO는 담당자. SKIPPED·CANCELLED는 제외 |
+| D-031 | 아이콘 처리 방법 없음 | 받은 파일은 둥근 모서리와 그림자가 이미 들어간 이미지라 그대로 쓰면 스토어 규격에 맞지 않음. 원본은 보존하고 스크립트로 정사각 아이콘과 Android 적응형 아이콘을 생성 |
+
+D-023 근거: A 60, B 40, 고정 A 1점, 고정 B 2점, 자동 5·3·1점이면 총 12점입니다. 가능한 결과 중 A에 5+1을 주면 A 58.3%로 목표와 1.7포인트 차이이고, 다음으로 가까운 조합은 50%로 10포인트 차이입니다. 비율을 크게 벗어나지 않으면 다른 결과가 나올 수 없습니다.
+
+## 시안과 원문이 충돌한 부분
+
+| ID | 시안 | 결정 |
+|---|---|---|
+| D-040 | 하단 탭 `홈` | 시안을 따름 (원문은 `이번 주`) |
+| D-041 | 주간 일정 행에 담당자 대신 `자동 배정` 표시 | 배정된 이름을 표시하고 방식은 보조 표기: `지민 · 자동 · 30분`. 원문의 "담당자 한눈에"를 충족하기 위함 |
+| D-042 | 구성원의 왕관·별 아이콘 | 순위처럼 보이지 않도록 **이 기기를 쓰는 사람(나)** 표시로 사용. 왕관은 현재 선택, 별은 선택 버튼 |
+| D-043 | 일정 탭 화면의 뒤로 버튼 | 탭으로 진입하면 숨기고, 다른 화면에서 푸시로 진입할 때만 표시 |
+| D-044 | 홈의 냉장고 재료·요리 추천 카드 | 앱에 냉장고 데이터가 없어 지어낸 내용이 됨. **같은 위치와 모양**으로 실제 일정 기반 안내(다음 할 일, 다음 주 생성 제안 등)를 표시. **확인 필요** |
+| D-045 | 일정 항목마다 전면 완료 화면 | 시안대로 넣되 되돌리기를 제공하고 설정에서 끌 수 있게 함 |
+| D-046 | 헤더 `우리집 ▾` | MVP는 집 하나. 눌렀을 때 집 정보 시트를 표시. 스키마는 여러 집을 지원 |
+| D-047 | 시안 날짜(10월 27일이 월요일)는 2026년 달력과 다름 | 표시만 참고하고 실제 날짜로 계산 |
+
+## 기본값
+
+- 분배 기준 기본값은 부담 점수, 주 시작은 월요일, 언어는 한국어입니다.
+- 첫 출시는 **대한민국**만 배포합니다. EU 판매자 고지(DSA)와 다국어 대응을 피하기 위해서입니다.
+- 광고·결제·구독 없음. 수익 없는 무료 앱입니다.
+
+## 근거 자료 (2026-11-05 확인)
+
+- Expo: [SDK 버전표](https://docs.expo.dev/versions/latest/), [변경 기록](https://expo.dev/changelog), [요금](https://expo.dev/pricing). npm `latest`는 58.0.23입니다.
+- Google Play: [대상 API](https://support.google.com/googleplay/android-developer/answer/11926878), [개인 계정 테스트](https://support.google.com/googleplay/android-developer/answer/14151465), [사용자 데이터](https://support.google.com/googleplay/android-developer/answer/10144311), [데이터 보안](https://support.google.com/googleplay/android-developer/answer/10787469), [계정 삭제](https://support.google.com/googleplay/android-developer/answer/13327111), [정확한 알람](https://support.google.com/googleplay/android-developer/answer/13161072), [등록비](https://support.google.com/googleplay/android-developer/answer/6112435)
+- Apple: [심사 지침](https://developer.apple.com/app-store/review/guidelines/), [SDK 요구사항](https://developer.apple.com/news/upcoming-requirements/), [DSA 판매자](https://developer.apple.com/help/app-store-connect/manage-compliance-information/manage-eu-digital-services-act-compliance-information), [개발자 프로그램](https://developer.apple.com/programs/)
+- Supabase: [Free 프로젝트 일시 중지](https://supabase.com/kb/faqs/platform/free-project-pausing)
