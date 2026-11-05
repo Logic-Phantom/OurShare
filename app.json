@@ -9,7 +9,9 @@
     "ios": {
       "bundleIdentifier": "app.ourshare.mobile",
       "supportsTablet": false,
-      "infoPlist": { "ITSAppUsesNonExemptEncryption": false }
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "app.ourshare.mobile",
@@ -27,9 +29,45 @@
         "android.permission.READ_CONTACTS",
         "android.permission.SYSTEM_ALERT_WINDOW",
         "android.permission.SCHEDULE_EXACT_ALARM",
-        "android.permission.USE_EXACT_ALARM"
-      ]
+        "android.permission.USE_EXACT_ALARM",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      }
     },
-    "experiments": { "reactCompiler": true }
+    "experiments": {
+      "reactCompiler": true
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FBFAF7",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160,
+          "dark": {
+            "backgroundColor": "#17181C",
+            "image": "./assets/images/splash-icon.png"
+          }
+        }
+      ],
+      "expo-sqlite",
+      "expo-font",
+      "expo-status-bar"
+    ],
+    "icon": "./assets/images/icon.png",
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "우리몫",
+      "shortName": "우리몫",
+      "themeColor": "#FBFAF7",
+      "backgroundColor": "#FBFAF7"
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { historyCorrection, weekLoadFromChores } from '@/domain/allocation/load-history';
 import { createRandom, shuffled } from '@/domain/allocation/seeded-random';
-import { areSharesValid, equalShares, redistributeShares, roundToTotal } from '@/domain/allocation/shares';
+import { areSharesValid, equalShares, redistributeShares, roundToTotal, sharesAfterJoin, sharesAfterLeave } from '@/domain/allocation/shares';
 import { chore, member } from '../../helpers/fixtures';
 
 describe('shares', () => {
@@ -28,6 +28,16 @@ describe('shares', () => {
     expect(three[0]).toBe(60);
     expect(three.reduce((a, b) => a + b, 0)).toBe(100);
     expect(three[1]).toBeGreaterThan(three[2]!);
+  });
+
+  it('splits when someone joins or leaves', () => {
+    expect(sharesAfterJoin([50, 50], 'EQUAL')).toEqual([34, 33, 33]);
+    expect(sharesAfterJoin([], 'CUSTOM')).toEqual([100]);
+    expect(sharesAfterJoin([60, 40], 'CUSTOM').reduce((a, b) => a + b, 0)).toBe(100);
+    expect(sharesAfterLeave([50, 30, 20], 0, 'CUSTOM')).toEqual([60, 40]);
+    expect(sharesAfterLeave([34, 33, 33], 2, 'EQUAL')).toEqual([50, 50]);
+    expect(sharesAfterLeave([100, 0, 0], 0, 'CUSTOM')).toEqual([50, 50]);
+    expect(sharesAfterLeave([100], 0, 'CUSTOM')).toEqual([]);
   });
 
   it('handles others at 0 and out-of-range input', () => {

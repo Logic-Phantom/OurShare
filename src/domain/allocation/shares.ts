@@ -1,4 +1,4 @@
-import type { Member } from '../models';
+import type { Member, SharePreset } from '../models';
 
 /** Rounds to integers that still add up to `total`, giving leftovers to the largest remainders. */
 export function roundToTotal(values: readonly number[], total: number): number[] {
@@ -15,6 +15,21 @@ export function roundToTotal(values: readonly number[], total: number): number[]
 
 export function equalShares(count: number): number[] {
   return count === 0 ? [] : roundToTotal(Array.from({ length: count }, () => 100 / count), 100);
+}
+
+/** Shares after someone joins. They are added last, starting from an even split as the brief asks. */
+export function sharesAfterJoin(shares: readonly number[], preset: SharePreset): number[] {
+  const count = shares.length + 1;
+  if (preset === 'EQUAL') return equalShares(count);
+  return redistributeShares([...shares, 0], count - 1, 100 / count);
+}
+
+/** Shares after someone leaves. The rest keep their proportions. */
+export function sharesAfterLeave(shares: readonly number[], index: number, preset: SharePreset): number[] {
+  const rest = shares.filter((_, position) => position !== index);
+  const total = rest.reduce((sum, share) => sum + share, 0);
+  if (preset === 'EQUAL' || total === 0) return equalShares(rest.length);
+  return roundToTotal(rest.map((share) => (share / total) * 100), 100);
 }
 
 export function areSharesValid(members: readonly Member[]): boolean {

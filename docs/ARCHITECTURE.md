@@ -2,7 +2,7 @@
 
 > 우리의 집안일, 우리의 몫
 > 기준일 2026-11-05. 원본 기획은 [SUPER_PROMPT.md](SUPER_PROMPT.md), 원본과 달라진 점은 [DECISIONS.md](DECISIONS.md)에 있습니다.
-> 단계 1(배정 엔진)까지 구현했습니다. 화면과 DB는 아직 없으며, 나머지 구조는 계획입니다.
+> 단계 2까지 구현했습니다. 일정 생성과 완료, 알림, 백업은 아직 없으며, 해당 구조는 계획입니다.
 
 ## 1. 한눈에 보기
 
@@ -59,7 +59,7 @@ OurShare/
 │   ├── app/                       # Expo Router (파일 = 화면)
 │   │   ├── _layout.tsx            # DB 마이그레이션 완료 후 화면 표시
 │   │   ├── index.tsx              # 온보딩/홈 분기
-│   │   ├── onboarding/            # index(소개) · household · ratio · chores
+│   │   ├── onboarding/            # index(소개) · members(집·구성원·비율) · chores
 │   │   ├── (tabs)/
 │   │   │   ├── _layout.tsx        # 홈 · 일정 · 집안일 · 우리집
 │   │   │   ├── index.tsx          # 홈
@@ -72,7 +72,7 @@ OurShare/
 │   │   │   └── status.tsx         # 이번 주 현황
 │   │   ├── completed.tsx          # 완료 축하(모달)
 │   │   ├── notifications.tsx      # 알림함
-│   │   ├── settings/              # index · reminders · backup
+│   │   ├── settings.tsx           # 기본 설정, 전체 삭제 (이후 알림·백업 추가)
 │   │   └── legal/[doc].tsx        # 처리방침 · 약관 · 오픈소스 고지
 │   ├── components/                # 화면 조합 (ChoreRow, WeekStrip, ProgressRing, ShareBars 등)
 │   ├── design-system/             # tokens · theme · components/

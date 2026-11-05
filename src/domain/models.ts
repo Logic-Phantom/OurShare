@@ -18,6 +18,22 @@ export interface Member {
   isActive: boolean;
 }
 
+export type SharePreset = 'EQUAL' | 'CUSTOM';
+
+export interface Household {
+  id: string;
+  name: string;
+  weekStartsOn: WeekStartsOn;
+  metric: DistributionMetric;
+  sharePreset: SharePreset;
+}
+
+export interface HouseholdMember extends Member {
+  colorKey: string;
+  avatarKey: string;
+  sortOrder: number;
+}
+
 export interface ChoreDefinition {
   id: string;
   title: string;
