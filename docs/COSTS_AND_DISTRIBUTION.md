@@ -39,7 +39,7 @@
 - [ ] **스토어 문구 확인**: [STORE_LISTING.md](STORE_LISTING.md)의 설명·키워드·카테고리
 - [x] **지원 이메일과 개인정보 문의 담당 이름을 `.env.local`에 입력** (git 제외. 2026-11-06 입력, EAS preview·production 환경 변수에도 등록)
 - [x] `npm run legal:site` → `docs/legal/` 커밋·푸시 (2026-11-06)
-- [ ] **GitHub Pages 켜기**: 저장소 Settings → Pages → `main` `/docs` → 처리방침 URL이 열리는지 확인
+- [x] **GitHub Pages 켜기** (2026-11-06, `main` `/docs`, `.nojekyll`). 처리방침·약관·계정 삭제 페이지 200 확인
 
 ### 1-1. 공유 서버 (Supabase)
 

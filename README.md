@@ -270,4 +270,5 @@ cd android && JAVA_HOME="/c/Program Files/Microsoft/jdk-17.0.20.101-hotspot" AND
 - 운영자 이름과 지원 이메일을 `.env.local`과 EAS 환경 변수에 넣고 정책 페이지 4개를 생성해 커밋. 연락처가 들어간 production AAB(versionCode 4)를 다시 빌드.
 - 아이콘 출처: 소유자가 ChatGPT로 제작(LICENSES.md).
 - Play Console에 앱 생성(소유자가 정책 선언 체크). 스토어 등록정보, 카테고리, 연락처, 개인정보처리방침 URL, 광고·로그인·광고 ID·정부 앱 선언 입력.
-- 남음: 콘텐츠 등급·타겟층·데이터 보안·금융·건강·판매자 상태 선언(소유자), GitHub Pages 켜기, 비공개 테스트 트랙에 AAB 업로드와 테스터 12명 모집.
+- GitHub Pages 공개: https://logic-phantom.github.io/OurShare/legal/ (처리방침, 약관, 계정 삭제 안내 열림 확인).
+- 남음: 콘텐츠 등급·타겟층·데이터 보안·금융·건강·판매자 상태 선언(소유자), 비공개 테스트 트랙에 AAB 업로드와 테스터 12명 모집.
