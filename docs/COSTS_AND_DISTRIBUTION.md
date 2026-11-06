@@ -13,7 +13,7 @@
 | EAS Free | $0 | Android 15회, iOS 15회. 대기가 길 수 있고 빌드당 45분 제한. **기존 앱과 같은 계정이면 한도를 함께 쓰는지 확인 필요** |
 | Google Play | $25 1회 | 기존 계정이 있으면 추가 없음 |
 | Apple Developer | $99/년 | iOS 출시와 TestFlight에 필수 |
-| 서버 | 0원 | MVP에 없음 |
+| 서버 | 0원 | 공유 모드만 Supabase Free 사용 |
 | Supabase Free | 0원 | 2026-11-06 공식 확인: 활성 프로젝트 2개, DB 500MB, 전송 5GB, MAU 5만, 익명 로그인 포함, Realtime 미사용. 1주일 미사용 시 일시 정지(1년 안 복원). 사용자가 늘어 한도나 정지가 문제되면 Pro $25/월 |
 | 정책 페이지 | 0원 | GitHub Pages |
 
@@ -43,13 +43,14 @@
 
 ### 1-1. 공유 서버 (Supabase)
 
-- [ ] **Supabase 대시보드에서 남은 무료 프로젝트 자리 확인** (활성 2개까지, CutPick 등이 쓰는 중일 수 있음)
-- [ ] 새 프로젝트 `ourshare`, 리전 **Northeast Asia (Seoul)**. 데이터베이스 비밀번호는 소유자가 직접 생성·보관
-- [ ] SQL Editor에서 `supabase/migrations/20261106000000_sharing.sql` 실행
-- [ ] Authentication > Sign In / Providers에서 **Anonymous sign-ins 켜기**, 이메일 가입은 끄기
-- [ ] Database > Extensions에서 `pg_cron` 켜고 `select cron.schedule('ourshare-cleanup', '0 3 * * *', 'select public.cleanup_stale()');`
-- [ ] Project URL과 publishable key를 `.env.local`과 EAS 환경 변수(preview·production)에 등록. service_role 키는 넣지 않음
-- [ ] 두 기기로 공유 시작 → 초대 → 참여 → 서로 체크 확인
+- [x] **Supabase 대시보드에서 남은 무료 프로젝트 자리 확인** (활성 2개까지, CutPick 등이 쓰는 중일 수 있음)
+- [x] 새 프로젝트 `ourshare`, 리전 **Northeast Asia (Seoul)**. 데이터베이스 비밀번호는 소유자가 직접 생성·보관
+- [x] SQL Editor에서 `supabase/migrations/20261106000000_sharing.sql` 실행
+- [x] Authentication > Sign In / Providers에서 **Anonymous sign-ins 켜기**, 이메일 가입은 끄기
+- [x] Database > Extensions에서 `pg_cron` 켜고 `select cron.schedule('ourshare-cleanup', '0 3 * * *', 'select public.cleanup_stale()');`
+- [x] Project URL과 publishable key를 `.env.local`과 EAS 환경 변수(preview·production)에 등록. service_role 키는 넣지 않음
+- [x] 2026-11-06 완료: 프로젝트 `rywsweszbuxjjgpeokjx`(조직 OurShare, 서울). 무료 활성 자리 2개를 LunchAgree와 함께 씀(CutPick·WearLog는 일시 정지). 실서버 스모크 8/8, 두 브라우저 공유 확인
+- [ ] 두 실기기(Android·iOS)로 공유 시작 → 초대 → 참여 → 서로 체크 확인
 
 ### 2. 빌드
 
@@ -82,6 +83,6 @@
 ### 확인 완료
 
 - [x] 약관, 오픈소스 고지 화면 (2026-11-06, 초안)
-- [x] 라이선스 감사 (2026-11-06, 63개 모두 MIT·ISC. 패키지 변경 시 `npm run licenses`)
+- [x] 라이선스 감사 (2026-11-06, 72개: MIT 70·ISC 1·0BSD 1. 패키지 변경 시 `npm run licenses`)
 - [x] 아이콘: iOS 1024 정사각·투명 없음, Android 적응형 안전 영역·모노크롬, 알림 아이콘 (스크립트 생성)
 - [x] 스토어 그래픽: 스크린샷 8장(1320×2868), Play 그래픽 이미지, 512 아이콘 (2026-11-06)
