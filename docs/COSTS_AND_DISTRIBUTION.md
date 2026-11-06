@@ -34,11 +34,11 @@
 ### 1. 준비 (출시 전 아무 때나)
 
 - [ ] **KIPRIS 상표 검색** ([LICENSES.md](LICENSES.md))
-- [ ] **아이콘 제작 출처와 상업적 이용 가능 여부 확인**
+- [x] **아이콘 제작 출처와 상업적 이용 가능 여부 확인** (2026-11-06: ChatGPT로 제작, [LICENSES.md](LICENSES.md))
 - [ ] **앱 이름 확정**: 초안은 "우리몫 - 집안일 분담"
 - [ ] **스토어 문구 확인**: [STORE_LISTING.md](STORE_LISTING.md)의 설명·키워드·카테고리
-- [ ] **지원 이메일과 개인정보 문의 담당 이름을 `.env.local`에 입력** (git 제외)
-- [ ] 정책 문구 최종 검토 후 `npm run legal:site` → `docs/legal/` 커밋·푸시
+- [x] **지원 이메일과 개인정보 문의 담당 이름을 `.env.local`에 입력** (git 제외. 2026-11-06 입력, EAS preview·production 환경 변수에도 등록)
+- [x] `npm run legal:site` → `docs/legal/` 커밋·푸시 (2026-11-06)
 - [ ] **GitHub Pages 켜기**: 저장소 Settings → Pages → `main` `/docs` → 처리방침 URL이 열리는지 확인
 
 ### 1-1. 공유 서버 (Supabase)
