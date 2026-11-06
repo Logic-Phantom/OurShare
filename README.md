@@ -117,7 +117,7 @@ Claude Code에서 이어갈 때는 저장소를 연 뒤 "README의 이어서 하
 
 **실기기 확인 (가장 먼저).** 웹과 네이티브는 SQLite 구현이 다르고, 알림·백업·공유 시트는 웹에서 확인할 수 없습니다.
 
-- [ ] Android 설치: 로컬은 아래 "로컬 Android 빌드"의 APK를 `adb install`, 또는 `npx eas-cli@latest build --profile preview --platform android`(EAS 무료 한도 사용)
+- [ ] Android 설치: [EAS 테스트 빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/30ce85fb-5479-46a8-85b8-dc6a4416a4aa)를 휴대폰에서 열어 APK 설치 (2026-11-06 빌드, 권한 차단 전 버전). 새로 만들려면 `npx eas-cli@latest build --profile preview --platform android`
 - [ ] `scripts/android-device.ps1`을 딸깍에서 가져와 수정
 - [ ] 한 주 전체 시나리오, 앱 재시작 후 유지
 - [ ] 알림: 권한 승인·거부·나중에 켜기, 실제 수신 시간, 알림 눌러 일정 열기, 재부팅 후 유지
@@ -199,3 +199,5 @@ cd android && JAVA_HOME="/c/Program Files/Microsoft/jdk-17.0.20.101-hotspot" AND
 - 스크린샷을 보다 찾아 고친 문제: 현황 화면의 구성원 순서가 저장 순서에 따라 바뀌던 문제, 현황 화면이 차이의 원인을 잘못 단정하던 문구(D-066 수정).
 - 로컬 Android 릴리스 빌드: `expo prebuild` 성공. `gradlew assembleRelease`는 4번 시도해 모두 실패. 한글 사용자 경로 때문에 임시 폴더, SDK, CMake 경로를 차례로 영문 경로로 옮겨 라이브러리 C++ 빌드까지는 통과했고, 마지막에 Windows 경로 길이 제한(260자)으로 실패. APK와 최종 매니페스트는 미확인.
 - EAS: 계정 `lcm2`로 로그인 확인. `eas init`과 EAS 빌드는 승인 전이라 실행하지 않음.
+- EAS (소유자 승인 후): `eas init`으로 `@lcm2/ourshare` 생성·연결, `eas build --profile preview --platform android` 성공(versionCode 1, minSdk 24, targetSdk 36). Android 업로드 키는 EAS가 생성해 서버에 보관.
+- APK 권한 확인(`aapt dump permissions`): 알림 라이브러리가 덧붙인 원격 푸시·설치 경로·제조사 배지 권한 18개를 발견해 `blockedPermissions`로 차단(D-081). prebuild 매니페스트에 제거 표시 33개 확인. 차단 후 APK는 미확인(다음 빌드에서 확인).

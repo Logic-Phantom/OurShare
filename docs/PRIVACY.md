@@ -33,7 +33,9 @@
 | `RECEIVE_BOOT_COMPLETED` | 재부팅 후 알림 복원. `expo-notifications` 포함 |
 | 그 외 | 사용 안 함. `blockedPermissions`로 명시 차단 |
 
-`SCHEDULE_EXACT_ALARM`, `USE_EXACT_ALARM`도 차단합니다. 빌드 후 병합된 매니페스트를 직접 확인합니다.
+`SCHEDULE_EXACT_ALARM`, `USE_EXACT_ALARM`도 차단합니다.
+
+2026-11-06 첫 EAS 빌드 APK의 실제 권한을 확인했습니다. 남기는 권한은 `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`, `VIBRATE`, `WAKE_LOCK`(알림), `INTERNET`, `ACCESS_NETWORK_STATE`(React Native 기본, 앱이 서버와 통신하지는 않음), 앱 내부용 `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`입니다. 알림 라이브러리가 덧붙인 원격 푸시·설치 경로·배지 권한은 차단했습니다(D-081). **차단 후 APK는 아직 다시 빌드해 확인하지 않았습니다.** 다음 빌드에서 `aapt dump permissions`로 확인합니다.
 
 ## 스토어 신고 초안
 

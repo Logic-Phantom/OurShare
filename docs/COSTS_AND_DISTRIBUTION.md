@@ -45,8 +45,11 @@
 
 - [x] `eas.json` (2026-11-06: preview는 내부 테스트용 APK, production은 스토어용, 빌드 번호는 EAS가 자동 증가)
 - [x] iOS 개인정보 매니페스트를 `app.json`에 작성 (2026-11-06, 설치된 패키지 기준)
-- [ ] `npx eas-cli@latest init`으로 새 EAS 프로젝트 연결 (계정 `lcm2`, 원격 프로젝트가 생김)
-- [ ] `npx eas-cli@latest build --profile preview --platform android` → 실기기 확인 (무료 한도 사용)
+- [x] `npx eas-cli@latest init`으로 새 EAS 프로젝트 연결 (2026-11-06, `@lcm2/ourshare`)
+- [x] `npx eas-cli@latest build --profile preview --platform android` (2026-11-06 성공, versionCode 1, minSdk 24, targetSdk 36, APK 약 111MB)
+- [ ] **Android 업로드 키 백업**: `npx eas-cli@latest credentials` → Android → 키스토어 내려받아 안전한 곳에 보관
+- [ ] 위 APK를 휴대폰에 설치해 실기기 확인 (아래 항목)
+- [ ] 다음 빌드에서 차단한 권한이 빠졌는지 확인 ([PRIVACY.md](PRIVACY.md))
 - [ ] **Apple Developer 가입 확인** → `npx eas-cli@latest build --profile production --platform ios` → TestFlight 실기기 확인
 - [ ] 실기기: 재시작 유지, 알림 승인·거부·재부팅, 백업·복원, 공유 시트, 글자 확대, TalkBack, VoiceOver
 - [ ] iOS 빌드에 포함된 개인정보 매니페스트 확인 (Apple이 누락을 메일로 알려 줌)
