@@ -51,6 +51,7 @@ npm run simulate
 | [PRIVACY](docs/PRIVACY.md) | 데이터, 권한, 스토어 신고 초안 |
 | [LICENSES](docs/LICENSES.md) | 라이선스, 자산, 앱 이름 확인 |
 | [COSTS_AND_DISTRIBUTION](docs/COSTS_AND_DISTRIBUTION.md) | 비용, 스토어 요건, 출시 체크리스트 |
+| [TESTING](docs/TESTING.md) | 자동 테스트 범위, 실기기 테스트 계획 |
 | [STORE_LISTING](docs/STORE_LISTING.md) | 스토어 문구, 그래픽, 데이터 보안·개인정보·연령 등급 답변, 심사 메모 |
 
 ## 다른 PC에서 이어서 하기
@@ -117,8 +118,8 @@ Claude Code에서 이어갈 때는 저장소를 연 뒤 "README의 이어서 하
 
 **실기기 확인 (가장 먼저).** 웹과 네이티브는 SQLite 구현이 다르고, 알림·백업·공유 시트는 웹에서 확인할 수 없습니다.
 
-- [ ] Android 설치: [EAS 테스트 빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/30ce85fb-5479-46a8-85b8-dc6a4416a4aa)를 휴대폰에서 열어 APK 설치 (2026-11-06 빌드, 권한 차단 전 버전). 새로 만들려면 `npx eas-cli@latest build --profile preview --platform android`
-- [ ] `scripts/android-device.ps1`을 딸깍에서 가져와 수정
+- [ ] Android 설치: [EAS 테스트 빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/7e9ecda7-b031-4596-a9cf-f846116246cb)를 휴대폰에서 열어 APK 설치 (2026-11-06 빌드, 권한 차단 반영). 검증 순서는 [docs/TESTING.md](docs/TESTING.md). 새로 만들려면 `npx eas-cli@latest build --profile preview --platform android`
+- [x] `scripts/android-device.ps1` 준비 (2026-11-06)
 - [ ] 한 주 전체 시나리오, 앱 재시작 후 유지
 - [ ] 알림: 권한 승인·거부·나중에 켜기, 실제 수신 시간, 알림 눌러 일정 열기, 재부팅 후 유지
 - [ ] 백업 만들기 → 데이터 삭제 → 복원, 일정 공유 시트
@@ -201,3 +202,6 @@ cd android && JAVA_HOME="/c/Program Files/Microsoft/jdk-17.0.20.101-hotspot" AND
 - EAS: 계정 `lcm2`로 로그인 확인. `eas init`과 EAS 빌드는 승인 전이라 실행하지 않음.
 - EAS (소유자 승인 후): `eas init`으로 `@lcm2/ourshare` 생성·연결, `eas build --profile preview --platform android` 성공(versionCode 1, minSdk 24, targetSdk 36). Android 업로드 키는 EAS가 생성해 서버에 보관.
 - APK 권한 확인(`aapt dump permissions`): 알림 라이브러리가 덧붙인 원격 푸시·설치 경로·제조사 배지 권한 18개를 발견해 `blockedPermissions`로 차단(D-081). prebuild 매니페스트에 제거 표시 33개 확인. 차단 후 APK는 미확인(다음 빌드에서 확인).
+- 남은 작업: 목표 0%인 구성원에게 고정 담당 일이 있으면 경고(기획서 3.1, 웹 미리보기 확인), 실기기 조작 스크립트 `scripts/android-device.ps1`(설치·실행·권한·예약 알림·글자 크기·재부팅 명령 추가), 실기기 테스트 계획 `docs/TESTING.md`.
+- EAS 빌드 2건: 권한 차단 후 preview APK(versionCode 1)와 Play 업로드용 production AAB(versionCode 2) 성공. APK 요청 권한은 `INTERNET`, `ACCESS_NETWORK_STATE`, `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`, `VIBRATE`, `WAKE_LOCK`, 앱 내부용 1개뿐임을 확인. AAB 매니페스트에도 푸시·배지·설치 경로 권한 없음.
+- 미실행: 실기기 검증 전체(소유자가 나중에 진행), iOS 빌드(Apple Developer 계정 필요), 스토어 등록(소유자 계정 필요).

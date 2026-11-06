@@ -49,7 +49,8 @@
 - [x] `npx eas-cli@latest build --profile preview --platform android` (2026-11-06 성공, versionCode 1, minSdk 24, targetSdk 36, APK 약 111MB)
 - [ ] **Android 업로드 키 백업**: `npx eas-cli@latest credentials` → Android → 키스토어 내려받아 안전한 곳에 보관
 - [ ] 위 APK를 휴대폰에 설치해 실기기 확인 (아래 항목)
-- [ ] 다음 빌드에서 차단한 권한이 빠졌는지 확인 ([PRIVACY.md](PRIVACY.md))
+- [x] 차단한 권한이 빠졌는지 확인 (2026-11-06, preview APK와 production AAB)
+- [x] Play 업로드용 AAB 빌드 (2026-11-06, `production`, versionCode 2): [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/df1e1a2c-cdac-4f20-a5df-0a311909b547)
 - [ ] **Apple Developer 가입 확인** → `npx eas-cli@latest build --profile production --platform ios` → TestFlight 실기기 확인
 - [ ] 실기기: 재시작 유지, 알림 승인·거부·재부팅, 백업·복원, 공유 시트, 글자 확대, TalkBack, VoiceOver
 - [ ] iOS 빌드에 포함된 개인정보 매니페스트 확인 (Apple이 누락을 메일로 알려 줌)
@@ -58,7 +59,7 @@
 
 - [ ] **Play Console에서 앱 만들기** (패키지 `app.ourshare.mobile`, 무료, 대한민국)
 - [ ] 스토어 등록정보, 그래픽, 데이터 보안, 콘텐츠 등급, 타겟 연령, 앱 액세스, 광고 없음 입력
-- [ ] `npx eas-cli@latest build --profile production --platform android` (AAB) 업로드
+- [ ] 위 AAB를 비공개 테스트 트랙에 업로드 (처음 한 번은 Play Console 웹에서 직접. 이후 `npx eas-cli@latest submit --platform android`는 Google 서비스 계정 키가 필요)
 - [ ] **비공개 테스트: 테스터 12명 이상 × 14일 연속** (2023-11-13 이후 만든 개인 계정). 조직 계정이면 해당 없음. 앱마다 다시 필요한지는 Play Console에서 확인
 - [ ] 프로덕션 액세스 신청 → 심사 (보통 7일 이내)
 
