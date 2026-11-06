@@ -1,7 +1,7 @@
 # Builds every app icon from the supplied artwork. Never edit the outputs by hand.
 # Usage: python scripts/build-app-icons.py   (needs Pillow)
 # Input:  assets/brand/icon-source.webp  (a mockup: artwork on a rounded card with a drop shadow)
-# Output: assets/images/{icon,android-icon-foreground,android-icon-monochrome,splash-icon,favicon}.png
+# Output: assets/images/{icon,android-icon-foreground,android-icon-monochrome,notification-icon,splash-icon,favicon}.png
 #
 # Stores apply their own corner mask and reject transparency on iOS, so the card and shadow are dropped
 # and the artwork alone is placed on a full-bleed white square.
@@ -59,6 +59,8 @@ def main() -> None:
     # Adaptive icons are masked to as little as the central 66%: stay inside it.
     on_canvas(art, 1024, 0.6, WHITE).save(OUT / 'android-icon-foreground.png')
     monochrome(art, 1024, 0.6).save(OUT / 'android-icon-monochrome.png')
+    # Android status-bar icon: white line work on transparent; the system tints it.
+    monochrome(art, 96, 0.84).save(OUT / 'notification-icon.png')
     rounded_card(art, 512).save(OUT / 'splash-icon.png')
     rounded_card(art, 48).save(OUT / 'favicon.png')
     print(f'icons written to {OUT}')

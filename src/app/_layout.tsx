@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { ReminderSync } from '@/components/ReminderSync';
 import { darkColors, ErrorState, fonts, lightColors, useColors } from '@/design-system';
 import { AppStateProvider, useAppState } from '@/hooks/app-state';
 
@@ -58,6 +59,8 @@ function Navigator() {
       <Stack.Screen name="week/status" />
       <Stack.Screen name="notifications" />
       <Stack.Screen name="completed" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
+      <Stack.Screen name="backup" />
+      <Stack.Screen name="legal/[doc]" />
     </Stack>
   );
 }
@@ -75,6 +78,7 @@ export default function RootLayout() {
       <ThemeProvider value={{ ...navTheme, colors: { ...navTheme.colors, background: c.background, card: c.surface, text: c.textPrimary, primary: c.greenDark, border: c.border } }}>
         <AppStateProvider>
           <StartupEffects />
+          <ReminderSync />
           <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
           <Navigator />
         </AppStateProvider>

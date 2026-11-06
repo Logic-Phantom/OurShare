@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Switch, View } from 'react-native';
 
 import { CHORE_TITLE_MAX, DEFAULT_WORKLOAD_POINTS, validateChoreDraft, type ChoreDraftErrors } from '@/domain/chores';
-import type { AssignmentMode, ChoreDefinition, HouseholdMember } from '@/domain/models';
+import type { AssignmentMode, ChoreDefinition, HouseholdMember, ReminderMode } from '@/domain/models';
 import {
   AppText,
   BottomSheet,
@@ -36,6 +36,12 @@ const MODE_OPTIONS: readonly { value: AssignmentMode; label: string }[] = [
   { value: 'FIXED', label: '고정' },
   { value: 'AUTO_BALANCED_RANDOM', label: '자동' },
   { value: 'MANUAL', label: '수동' },
+];
+
+const REMINDER_OPTIONS: readonly { value: ReminderMode; label: string }[] = [
+  { value: 'NONE', label: '없음' },
+  { value: 'SAME_DAY', label: '당일' },
+  { value: 'DAY_BEFORE', label: '전날 저녁' },
 ];
 
 const MODE_HELP: Record<AssignmentMode, string> = {
@@ -99,6 +105,7 @@ export function ChoreForm({ view, chore }: { view: HouseholdView; chore?: ChoreD
   const [fixedMemberId, setFixedMemberId] = useState(chore?.fixedMemberId ?? null);
   const [notes, setNotes] = useState(chore?.notes ?? '');
   const [isActive, setIsActive] = useState(chore?.isActive ?? true);
+  const [reminderMode, setReminderMode] = useState<ReminderMode>(chore?.reminderMode ?? 'SAME_DAY');
   const [errors, setErrors] = useState<ChoreDraftErrors>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const [sheet, setSheet] = useState<'minutes' | 'time' | 'member' | null>(null);
@@ -111,7 +118,7 @@ export function ChoreForm({ view, chore }: { view: HouseholdView; chore?: ChoreD
     const found = validateChoreDraft(draft, members);
     setErrors(found);
     if (Object.keys(found).length > 0) return;
-    const fields = { ...draft, category, estimatedMinutes, dueTime, notes, isActive, reminderMode: chore?.reminderMode ?? ('NONE' as const) };
+    const fields = { ...draft, category, estimatedMinutes, dueTime, notes, isActive, reminderMode };
     try {
       if (chore) await saveChore({ ...chore, ...fields });
       else await createChore(household.id, fields);
@@ -190,6 +197,12 @@ export function ChoreForm({ view, chore }: { view: HouseholdView; chore?: ChoreD
         </View>
 
         <ValueRow label="시간" icon="alarm-outline" value={dueTime ? formatDueTime(dueTime) : '정하지 않음'} onPress={() => setSheet('time')} />
+
+        <View style={styles.group}>
+          <AppText variant="bodyStrong">알림</AppText>
+          <SegmentedChoice label="알림" options={REMINDER_OPTIONS} value={reminderMode} onChange={setReminderMode} />
+          <AppText variant="caption" tone="secondary">설정에서 알림을 켜야 울려요. 바꾼 내용은 다음에 만드는 일정부터 적용돼요.</AppText>
+        </View>
 
         <TextField label="메모 (선택)" value={notes} onChangeText={setNotes} placeholder="완료 기준 등을 적어 두세요" multiline maxLength={200} style={styles.notes} />
 

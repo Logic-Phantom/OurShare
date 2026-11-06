@@ -41,7 +41,8 @@ export function definitionFromTemplate(template: ChoreTemplate, sortOrder: numbe
     assignmentMode: 'AUTO_BALANCED_RANDOM',
     workloadPoints: template.workloadPoints,
     estimatedMinutes: template.estimatedMinutes,
-    reminderMode: 'NONE',
+    // Reminders only fire once the user turns them on in settings, so the per-chore default can be on.
+    reminderMode: 'SAME_DAY',
     notes: null,
     isActive: true,
     sortOrder,

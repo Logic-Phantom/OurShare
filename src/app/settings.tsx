@@ -1,12 +1,16 @@
+import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Switch, View } from 'react-native';
 
-import { AppText, ConfirmDialog, InlineMessage, Screen, ScreenHeader, SecondaryButton, SegmentedChoice, spacing, useColors } from '@/design-system';
+import { ReminderSettingsSection } from '@/components/ReminderSettingsSection';
+import { AppText, ConfirmDialog, InlineMessage, Screen, ScreenHeader, SecondaryButton, SegmentedChoice, spacing, useColors, ValueRow } from '@/design-system';
 import type { DistributionMetric, WeekStartsOn } from '@/domain/models';
 import { deleteAllData, loadHouseholdView, saveHouseholdSettings } from '@/features/household/household-service';
+import { SUPPORT_EMAIL } from '@/features/legal/documents';
 import { useAppState } from '@/hooks/app-state';
 import { useLoader } from '@/hooks/use-loader';
+import { cancelAll } from '@/infrastructure/notifications/local-notifications';
 import { logError } from '@/utils/log';
 
 const WEEK_OPTIONS = [
@@ -43,6 +47,7 @@ export default function SettingsScreen() {
     setConfirmingWipe(false);
     try {
       await deleteAllData();
+      await cancelAll();
       resetSettings();
       // Clear the stack first, or back would return to tabs that have no data behind them.
       if (router.canDismiss()) router.dismissAll();
@@ -87,10 +92,25 @@ export default function SettingsScreen() {
           <Switch value={settings.celebrationEnabled} onValueChange={(celebrationEnabled) => updateSettings({ celebrationEnabled })} accessibilityLabel="완료 축하 화면 보기" />
         </View>
 
+        <ReminderSettingsSection />
+
         <View style={styles.group}>
           <AppText variant="sectionTitle">데이터</AppText>
           <AppText variant="caption" tone="secondary">모든 내용은 이 기기 안에만 저장돼요.</AppText>
+          <ValueRow label="백업과 복원" value="" onPress={() => router.push('/backup')} />
           <SecondaryButton label="모든 데이터 삭제" tone="danger" onPress={() => setConfirmingWipe(true)} testID="wipe-data" />
+        </View>
+
+        <View style={styles.group}>
+          <AppText variant="sectionTitle">정보</AppText>
+          <ValueRow label="개인정보 처리방침" value="" onPress={() => router.push({ pathname: '/legal/[doc]', params: { doc: 'privacy' } })} />
+          <ValueRow label="이용약관" value="" onPress={() => router.push({ pathname: '/legal/[doc]', params: { doc: 'terms' } })} />
+          <ValueRow label="오픈소스 라이선스" value="" onPress={() => router.push({ pathname: '/legal/[doc]', params: { doc: 'oss' } })} />
+          <View style={styles.between}>
+            <AppText variant="bodyStrong" style={styles.flex}>앱 버전</AppText>
+            <AppText tone="secondary">{Constants.expoConfig?.version ?? ''}</AppText>
+          </View>
+          {SUPPORT_EMAIL ? <AppText variant="caption" tone="secondary">문의: {SUPPORT_EMAIL}</AppText> : null}
         </View>
         {failed ? <InlineMessage tone="warning">처리하지 못했어요. 다시 시도해 주세요.</InlineMessage> : null}
       </Screen>

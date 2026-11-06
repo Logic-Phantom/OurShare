@@ -2,7 +2,7 @@
 
 > 우리의 집안일, 우리의 몫
 > 기준일 2026-11-05. 원본 기획은 [SUPER_PROMPT.md](SUPER_PROMPT.md), 원본과 달라진 점은 [DECISIONS.md](DECISIONS.md)에 있습니다.
-> 단계 3까지 구현했습니다. 로컬 알림, 백업, 정책 화면은 아직 없으며, 해당 구조는 계획입니다.
+> 단계 4까지 구현했습니다. 남은 것은 실기기 확인과 출시 작업입니다. 공유 모드 관련 부분은 계획입니다.
 
 ## 1. 한눈에 보기
 
@@ -72,7 +72,8 @@ OurShare/
 │   │   │   └── status.tsx         # 이번 주 현황
 │   │   ├── completed.tsx          # 완료 축하(모달)
 │   │   ├── notifications.tsx      # 알림함
-│   │   ├── settings.tsx           # 기본 설정, 전체 삭제 (이후 알림·백업 추가)
+│   │   ├── settings.tsx           # 기본 설정, 알림, 데이터, 정보
+│   │   ├── backup.tsx             # 백업 만들기·복원
 │   │   └── legal/[doc].tsx        # 처리방침 · 약관 · 오픈소스 고지
 │   ├── components/                # 화면 조합 (ChoreRow, WeekStrip, ProgressRing, ShareBars 등)
 │   ├── design-system/             # tokens · theme · components/
