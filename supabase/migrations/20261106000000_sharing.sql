@@ -438,6 +438,7 @@ end $$;
 -- ---------------------------------------------------------------------------
 -- Function access: signed-in (including anonymous) users only. cleanup_stale is for the scheduler.
 -- ---------------------------------------------------------------------------
+revoke all on function public.sync_table_keys(text) from public;
 revoke all on function public.create_household(jsonb) from public;
 revoke all on function public.create_invite(uuid, text) from public;
 revoke all on function public.revoke_invites(uuid) from public;
