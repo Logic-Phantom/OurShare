@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
 
 import { AppText, ConfirmDialog, InlineMessage, Screen, ScreenHeader, SecondaryButton, SegmentedChoice, spacing, useColors } from '@/design-system';
 import type { DistributionMetric, WeekStartsOn } from '@/domain/models';
@@ -22,7 +22,7 @@ const METRIC_OPTIONS: readonly { value: DistributionMetric; label: string }[] = 
 export default function SettingsScreen() {
   const c = useColors();
   const router = useRouter();
-  const { notifyDataChanged, resetSettings } = useAppState();
+  const { notifyDataChanged, resetSettings, settings, updateSettings } = useAppState();
   const { data } = useLoader(loadHouseholdView);
   const [confirmingWipe, setConfirmingWipe] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -79,6 +79,14 @@ export default function SettingsScreen() {
           </>
         ) : null}
 
+        <View style={styles.between}>
+          <View style={styles.flex}>
+            <AppText variant="sectionTitle">완료 축하 화면</AppText>
+            <AppText variant="caption" tone="secondary">집안일을 체크하면 &quot;완료!&quot; 화면을 보여 줘요.</AppText>
+          </View>
+          <Switch value={settings.celebrationEnabled} onValueChange={(celebrationEnabled) => updateSettings({ celebrationEnabled })} accessibilityLabel="완료 축하 화면 보기" />
+        </View>
+
         <View style={styles.group}>
           <AppText variant="sectionTitle">데이터</AppText>
           <AppText variant="caption" tone="secondary">모든 내용은 이 기기 안에만 저장돼요.</AppText>
@@ -104,4 +112,5 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   content: { paddingTop: spacing.sm, gap: spacing.xl },
   group: { gap: spacing.sm },
+  between: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
 });

@@ -2,6 +2,7 @@ export * from './tokens';
 export * from './theme';
 export * from './components/AppText';
 export * from './components/Buttons';
+export * from './components/Charts';
 export * from './components/Feedback';
 export * from './components/Illustrations';
 export * from './components/Inputs';

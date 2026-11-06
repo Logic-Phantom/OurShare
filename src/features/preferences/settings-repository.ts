@@ -5,9 +5,11 @@ export interface AppSettings {
   onboardingDone: boolean;
   /** Who uses this phone: filters "my" chores and reminders. */
   meMemberId: string | null;
+  /** Show the full-screen "완료!" after checking a chore. */
+  celebrationEnabled: boolean;
 }
 
-export const DEFAULT_SETTINGS: AppSettings = { onboardingDone: false, meMemberId: null };
+export const DEFAULT_SETTINGS: AppSettings = { onboardingDone: false, meMemberId: null, celebrationEnabled: true };
 
 const KEY = 'settings';
 

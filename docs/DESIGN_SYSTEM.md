@@ -56,7 +56,8 @@
 | 진행 링, 체크, 별, 요일 칩, 색종이 | 코드로 그림 (`react-native-svg`) |
 | 탭·기능 아이콘 | `@expo/vector-icons` |
 | 소개 화면의 집과 사람들, 빗자루, 구성원 아바타 | SVG로 자체 제작 (`Illustrations.tsx`, `MemberAvatar.tsx`). 고해상도 원본을 받으면 교체 가능 |
-| 완료 화면의 집, 알림 아이콘 | 단계 3에서 같은 방식으로 제작 |
+| 완료 화면의 집, 색종이 | SVG로 자체 제작 (`DoneHouseIllustration`, `Confetti`) |
+| 알림함 아이콘 | 시안의 컬러 그림 대신 `Ionicons`를 연한 색 원 안에 표시 |
 | 빗자루 외 집안일 그림 | 시안의 컬러 그림 대신 `MaterialCommunityIcons`를 연초록 원 안에 표시 |
 
 ## 접근성

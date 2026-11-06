@@ -72,7 +72,7 @@ planWeek({
 |---|---|
 | `ON_TARGET` | 목표 비율에 맞춰 배정했어요. |
 | `FIXED_DEVIATION` | 고정 담당 업무를 반영해 지민 58%, 지은 42%로 배정됐어요. |
-| `INDIVISIBLE_DEVIATION` | 집안일을 똑같이 나눌 수 없어 지민 58%, 지은 42%로 배정됐어요. |
+| `INDIVISIBLE_DEVIATION` | 집안일을 목표대로 딱 맞게 나눌 수는 없어서 지민 58%, 지은 42%로 배정됐어요. |
 | `HISTORY_ADJUSTED` | 지난 일정의 부담을 고려해 조금 조정했어요. |
 | `ZERO_SHARE_EXCLUDED` | 지은님은 0%로 설정되어 자동 배정에서 제외했어요. |
 | `NO_ALTERNATIVE` | 지금 조건에서는 이 조합이 목표에 가장 가까워요. |

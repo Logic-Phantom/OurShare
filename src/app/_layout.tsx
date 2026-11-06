@@ -54,6 +54,10 @@ function Navigator() {
       <Stack.Screen name="chore/new" />
       <Stack.Screen name="chore/[id]" />
       <Stack.Screen name="settings" />
+      <Stack.Screen name="week/preview" />
+      <Stack.Screen name="week/status" />
+      <Stack.Screen name="notifications" />
+      <Stack.Screen name="completed" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
     </Stack>
   );
 }

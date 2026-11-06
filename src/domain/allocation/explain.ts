@@ -22,7 +22,7 @@ export function describeNote(note: PlanNote, shares: readonly ShareLine[], nameO
     case 'FIXED_DEVIATION':
       return `고정 담당 업무를 반영해 ${shareText}로 배정됐어요.`;
     case 'INDIVISIBLE_DEVIATION':
-      return `집안일을 똑같이 나눌 수 없어 ${shareText}로 배정됐어요.`;
+      return `집안일을 목표대로 딱 맞게 나눌 수는 없어서 ${shareText}로 배정됐어요.`;
     case 'HISTORY_ADJUSTED':
       return '지난 일정의 부담을 고려해 조금 조정했어요.';
     case 'ZERO_SHARE_EXCLUDED':

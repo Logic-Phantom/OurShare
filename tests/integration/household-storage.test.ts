@@ -233,10 +233,11 @@ describe('validation and labels', () => {
 describe('settings and reset', () => {
   it('persists settings and clears everything on delete', async () => {
     const view = await setUp();
-    await saveSettings({ onboardingDone: true, meMemberId: view.members[0]!.id });
-    expect(await loadSettings()).toEqual({ onboardingDone: true, meMemberId: view.members[0]!.id });
+    const saved = { onboardingDone: true, meMemberId: view.members[0]!.id, celebrationEnabled: false };
+    await saveSettings(saved);
+    expect(await loadSettings()).toEqual(saved);
     await deleteAllData();
     expect(await loadHouseholdView()).toBeNull();
-    expect(await loadSettings()).toEqual({ onboardingDone: false, meMemberId: null });
+    expect(await loadSettings()).toEqual({ onboardingDone: false, meMemberId: null, celebrationEnabled: true });
   });
 });

@@ -61,6 +61,45 @@ export function WelcomeIllustration({ width = 320 }: { width?: number }) {
   );
 }
 
+/** The little house on the "완료!" screen. */
+export function DoneHouseIllustration({ width = 280 }: { width?: number }) {
+  return (
+    <View style={{ width, height: (width * 170) / 300 }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Svg width="100%" height="100%" viewBox="0 0 300 170">
+        <Ellipse cx="150" cy="156" rx="148" ry="16" fill="#E4F2DC" />
+        <Tree x={38} y={104} scale={0.95} />
+        <Tree x={262} y={108} scale={0.85} />
+        <Path d="M86 82 150 38l64 44v74H86Z" fill="#FFF8EE" />
+        <Path d="M72 90 150 34l78 56" stroke={ROOF} strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <Rect x="102" y="104" width="22" height="52" rx="3" fill={ROOF} />
+        <Rect x="138" y="100" width="30" height="26" rx="4" fill="#CFE3F7" stroke={ROOF} strokeWidth="3" />
+        <Path d="M153 100v26M138 113h30" stroke={ROOF} strokeWidth="2.5" />
+        <Rect x="178" y="100" width="24" height="26" rx="4" fill="#CFE3F7" stroke={ROOF} strokeWidth="3" />
+        <Rect x="140" y="62" width="20" height="20" rx="4" fill="#CFE3F7" stroke={ROOF} strokeWidth="3" />
+      </Svg>
+    </View>
+  );
+}
+
+const CONFETTI = [
+  { x: 40, y: 20, r: 20, c: '#F6C945' }, { x: 92, y: 48, r: -30, c: '#F49A92' }, { x: 150, y: 14, r: 10, c: '#6FA8E8' },
+  { x: 214, y: 40, r: 40, c: '#7CC47F' }, { x: 268, y: 18, r: -15, c: '#F49A92' }, { x: 20, y: 74, r: 60, c: '#6FA8E8' },
+  { x: 282, y: 80, r: -50, c: '#F6C945' }, { x: 118, y: 86, r: 25, c: '#7CC47F' }, { x: 190, y: 92, r: -40, c: '#6FA8E8' },
+];
+
+/** Still confetti: celebratory without any motion, so Reduce Motion needs no special case. */
+export function Confetti({ width = 300 }: { width?: number }) {
+  return (
+    <View style={{ width, height: (width * 110) / 300 }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Svg width="100%" height="100%" viewBox="0 0 300 110">
+        {CONFETTI.map((piece, index) => (
+          <Rect key={index} x={piece.x} y={piece.y} width="6" height="14" rx="2" fill={piece.c} transform={`rotate(${piece.r} ${piece.x + 3} ${piece.y + 7})`} />
+        ))}
+      </Svg>
+    </View>
+  );
+}
+
 export function BroomIllustration({ size = 72 }: { size?: number }) {
   return (
     <View style={{ width: size, height: size }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
