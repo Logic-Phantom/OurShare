@@ -25,7 +25,7 @@
 | 빌드 (EAS `@lcm2/ourshare`) | 용도 | 링크 |
 |---|---|---|
 | preview APK, 1.0.0 (versionCode 2, 공유 포함) | 휴대폰에 바로 설치해 테스트 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/e16892c4-eff9-4745-b75d-a9b8082488b0) |
-| production AAB, 1.0.0 (versionCode 3, 공유 포함) | Play Console 업로드 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/6e211115-5dcf-4762-89e1-6c5ebaeeaceb) |
+| production AAB, 1.0.0 (versionCode 4, 공유·연락처 포함) | Play Console 업로드 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/bc30da45-ca67-486b-93a5-5d75d4fb137b) |
 
 ## 남은 작업
 
@@ -265,3 +265,9 @@ cd android && JAVA_HOME="/c/Program Files/Microsoft/jdk-17.0.20.101-hotspot" AND
 - 확인: PGlite 서버 테스트 15개, Jest 133개, 실서버 스모크 `node scripts/smoke-sharing.mjs` 8/8, 두 브라우저로 생성→초대→참여→배정 공유→완료 반영 확인, 두 계정 삭제 후 서버 행 0건 확인.
 - 공유가 들어간 EAS 빌드: preview APK(versionCode 2), production AAB(versionCode 3) 성공.
 - 미확인: Android·iOS 실기기에서 공유.
+
+**Play Console 등록 시작**
+- 운영자 이름과 지원 이메일을 `.env.local`과 EAS 환경 변수에 넣고 정책 페이지 4개를 생성해 커밋. 연락처가 들어간 production AAB(versionCode 4)를 다시 빌드.
+- 아이콘 출처: 소유자가 ChatGPT로 제작(LICENSES.md).
+- Play Console에 앱 생성(소유자가 정책 선언 체크). 스토어 등록정보, 카테고리, 연락처, 개인정보처리방침 URL, 광고·로그인·광고 ID·정부 앱 선언 입력.
+- 남음: 콘텐츠 등급·타겟층·데이터 보안·금융·건강·판매자 상태 선언(소유자), GitHub Pages 켜기, 비공개 테스트 트랙에 AAB 업로드와 테스터 12명 모집.

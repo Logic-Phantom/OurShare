@@ -61,15 +61,17 @@
 - [ ] **Android 업로드 키 백업**: `npx eas-cli@latest credentials` → Android → 키스토어 내려받아 안전한 곳에 보관
 - [ ] 위 APK를 휴대폰에 설치해 실기기 확인 (아래 항목)
 - [x] 차단한 권한이 빠졌는지 확인 (2026-11-06, preview APK와 production AAB)
-- [x] Play 업로드용 AAB 빌드 (2026-11-06, `production`, versionCode 2): [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/df1e1a2c-cdac-4f20-a5df-0a311909b547). 공유 포함 재빌드: preview [APK](https://expo.dev/accounts/lcm2/projects/ourshare/builds/e16892c4-eff9-4745-b75d-a9b8082488b0), production [AAB versionCode 3](https://expo.dev/accounts/lcm2/projects/ourshare/builds/6e211115-5dcf-4762-89e1-6c5ebaeeaceb)
+- [x] Play 업로드용 AAB 빌드 (2026-11-06, `production`, versionCode 2): [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/df1e1a2c-cdac-4f20-a5df-0a311909b547). 공유 포함 재빌드: preview [APK](https://expo.dev/accounts/lcm2/projects/ourshare/builds/e16892c4-eff9-4745-b75d-a9b8082488b0), production AAB versionCode 3. **연락처까지 넣은 업로드용 최종 AAB: [versionCode 4](https://expo.dev/accounts/lcm2/projects/ourshare/builds/bc30da45-ca67-486b-93a5-5d75d4fb137b)**
 - [ ] **Apple Developer 가입 확인** → `npx eas-cli@latest build --profile production --platform ios` → TestFlight 실기기 확인
 - [ ] 실기기: 재시작 유지, 알림 승인·거부·재부팅, 백업·복원, 공유 시트, 글자 확대, TalkBack, VoiceOver
 - [ ] iOS 빌드에 포함된 개인정보 매니페스트 확인 (Apple이 누락을 메일로 알려 줌)
 
 ### 3. Google Play
 
-- [ ] **Play Console에서 앱 만들기** (패키지 `app.ourshare.mobile`, 무료, 대한민국)
-- [ ] 스토어 등록정보, 그래픽, 데이터 보안, 콘텐츠 등급, 타겟 연령, 앱 액세스, 광고 없음 입력
+- [x] **Play Console에서 앱 만들기** (2026-11-06, 개발자 계정 Forest_LIM, 앱 ID 4974269256459483736, 패키지 `app.ourshare.mobile`, 무료, 기본 언어 한국어)
+- [x] 스토어 등록정보(설명, 아이콘, 그래픽 이미지, 스크린샷 8장), 카테고리(라이프스타일), 연락처 이메일 (2026-11-06)
+- [x] 앱 콘텐츠: 개인정보처리방침 URL, 광고 없음, 로그인 불필요, 광고 ID 미사용, 정부 앱 아님 (2026-11-06)
+- [ ] **앱 콘텐츠: 콘텐츠 등급, 타겟층, 데이터 보안, 금융 기능, 건강, 판매자 상태** (소유자 직접 제출. 답은 [STORE_LISTING.md](STORE_LISTING.md))
 - [ ] 위 AAB를 비공개 테스트 트랙에 업로드 (처음 한 번은 Play Console 웹에서 직접. 이후 `npx eas-cli@latest submit --platform android`는 Google 서비스 계정 키가 필요)
 - [ ] **비공개 테스트: 테스터 12명 이상 × 14일 연속** (2023-11-13 이후 만든 개인 계정). 조직 계정이면 해당 없음. 앱마다 다시 필요한지는 Play Console에서 확인
 - [ ] 프로덕션 액세스 신청 → 심사 (보통 7일 이내)
