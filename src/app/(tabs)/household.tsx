@@ -125,7 +125,14 @@ export default function HouseholdScreen() {
           <ShareEditor names={active.map((member) => member.displayName)} shares={shares} preset={preset} onChange={(nextPreset, nextShares) => setDraft({ preset: nextPreset, shares: nextShares })} />
         ) : null}
 
-        {active.length === 0 && data ? <InlineMessage tone="warning">구성원이 없어요. 자동 배정을 하려면 한 명 이상 있어야 해요.</InlineMessage> : null}
+        {active
+          .filter((member, index) => shares[index] === 0 && fixedChoresOf(member) > 0)
+          .map((member) => (
+            <InlineMessage key={member.id} tone="warning">
+              {`${member.displayName}님은 0%라 자동 배정에서 빠지지만, 고정으로 맡은 집안일 ${fixedChoresOf(member)}개는 그대로 맡아요. 바꾸려면 집안일 탭에서 고정 담당자를 바꿔 주세요.`}
+            </InlineMessage>
+          ))}
+        {active.length === 0 && data ?<InlineMessage tone="warning">구성원이 없어요. 자동 배정을 하려면 한 명 이상 있어야 해요.</InlineMessage> : null}
         {failed ? <InlineMessage tone="warning">저장하지 못했어요. 다시 시도해 주세요.</InlineMessage> : null}
 
         {inactive.length > 0 ? (
