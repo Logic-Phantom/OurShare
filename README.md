@@ -24,8 +24,8 @@
 
 | 빌드 (EAS `@lcm2/ourshare`) | 용도 | 링크 |
 |---|---|---|
-| preview APK, 1.0.0 (versionCode 1) | 휴대폰에 바로 설치해 테스트 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/7e9ecda7-b031-4596-a9cf-f846116246cb) |
-| production AAB, 1.0.0 (versionCode 2) | Play Console 업로드 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/df1e1a2c-cdac-4f20-a5df-0a311909b547) |
+| preview APK, 1.0.0 (versionCode 2, 공유 포함) | 휴대폰에 바로 설치해 테스트 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/e16892c4-eff9-4745-b75d-a9b8082488b0) |
+| production AAB, 1.0.0 (versionCode 3, 공유 포함) | Play Console 업로드 | [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/6e211115-5dcf-4762-89e1-6c5ebaeeaceb) |
 
 ## 남은 작업
 
@@ -263,4 +263,5 @@ cd android && JAVA_HOME="/c/Program Files/Microsoft/jdk-17.0.20.101-hotspot" AND
 - 정책: 처리방침·약관에 수집 항목(이름, 사용자 ID, 집안일 기록)과 계정 삭제 페이지 추가, iOS 매니페스트와 Play 데이터 보안 답변 갱신.
 - 실제 프로젝트 `rywsweszbuxjjgpeokjx`(서울)에 스키마 적용, 익명 로그인 켜고 이메일 가입 끔, EAS preview·production 환경 변수 등록. service_role 키와 DB 비밀번호는 앱·저장소에 없음.
 - 확인: PGlite 서버 테스트 15개, Jest 133개, 실서버 스모크 `node scripts/smoke-sharing.mjs` 8/8, 두 브라우저로 생성→초대→참여→배정 공유→완료 반영 확인, 두 계정 삭제 후 서버 행 0건 확인.
+- 공유가 들어간 EAS 빌드: preview APK(versionCode 2), production AAB(versionCode 3) 성공.
 - 미확인: Android·iOS 실기기에서 공유.

@@ -61,7 +61,7 @@
 - [ ] **Android 업로드 키 백업**: `npx eas-cli@latest credentials` → Android → 키스토어 내려받아 안전한 곳에 보관
 - [ ] 위 APK를 휴대폰에 설치해 실기기 확인 (아래 항목)
 - [x] 차단한 권한이 빠졌는지 확인 (2026-11-06, preview APK와 production AAB)
-- [x] Play 업로드용 AAB 빌드 (2026-11-06, `production`, versionCode 2): [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/df1e1a2c-cdac-4f20-a5df-0a311909b547)
+- [x] Play 업로드용 AAB 빌드 (2026-11-06, `production`, versionCode 2): [빌드 페이지](https://expo.dev/accounts/lcm2/projects/ourshare/builds/df1e1a2c-cdac-4f20-a5df-0a311909b547). 공유 포함 재빌드: preview [APK](https://expo.dev/accounts/lcm2/projects/ourshare/builds/e16892c4-eff9-4745-b75d-a9b8082488b0), production [AAB versionCode 3](https://expo.dev/accounts/lcm2/projects/ourshare/builds/6e211115-5dcf-4762-89e1-6c5ebaeeaceb)
 - [ ] **Apple Developer 가입 확인** → `npx eas-cli@latest build --profile production --platform ios` → TestFlight 실기기 확인
 - [ ] 실기기: 재시작 유지, 알림 승인·거부·재부팅, 백업·복원, 공유 시트, 글자 확대, TalkBack, VoiceOver
 - [ ] iOS 빌드에 포함된 개인정보 매니페스트 확인 (Apple이 누락을 메일로 알려 줌)
