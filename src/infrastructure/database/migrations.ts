@@ -107,4 +107,39 @@ export const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX activity_event_time ON activity_event(household_id, occurred_at);
   `,
+  // 2: sharing (docs/SHARING.md). Triggers queue every change to shared tables while the household is
+  // SHARED; rows applied from the server are written with a sync_mute row present so they are not re-queued.
+  `
+  ALTER TABLE household ADD COLUMN server_version INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE member ADD COLUMN server_version INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE chore_definition ADD COLUMN server_version INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE week_plan ADD COLUMN server_version INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE week_plan_target ADD COLUMN server_version INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE scheduled_chore ADD COLUMN server_version INTEGER NOT NULL DEFAULT 0;
+
+  CREATE TABLE sync_outbox (
+    table_name TEXT NOT NULL,
+    row_key TEXT NOT NULL,
+    queued_at INTEGER NOT NULL,
+    PRIMARY KEY (table_name, row_key)
+  );
+  CREATE TABLE sync_mute (muted INTEGER NOT NULL);
+  ${syncTriggers('household', 'NEW.id')}
+  ${syncTriggers('member', 'NEW.id')}
+  ${syncTriggers('chore_definition', 'NEW.id')}
+  ${syncTriggers('week_plan', 'NEW.id')}
+  ${syncTriggers('week_plan_target', "NEW.week_plan_id || '|' || NEW.member_id")}
+  ${syncTriggers('scheduled_chore', 'NEW.id')}
+  `,
 ];
+
+function syncTriggers(table: string, key: string): string {
+  const body = `
+    INSERT INTO sync_outbox (table_name, row_key, queued_at)
+    VALUES ('${table}', ${key}, (SELECT COALESCE(MAX(queued_at), 0) + 1 FROM sync_outbox))
+    ON CONFLICT (table_name, row_key) DO UPDATE SET queued_at = excluded.queued_at;`;
+  const when = `WHEN NOT EXISTS (SELECT 1 FROM sync_mute) AND EXISTS (SELECT 1 FROM household WHERE mode = 'SHARED')`;
+  return `
+  CREATE TRIGGER ${table}_sync_insert AFTER INSERT ON ${table} ${when} BEGIN ${body} END;
+  CREATE TRIGGER ${table}_sync_update AFTER UPDATE ON ${table} ${when} BEGIN ${body} END;`;
+}

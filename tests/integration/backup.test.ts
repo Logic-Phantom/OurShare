@@ -5,6 +5,7 @@ import { listChores } from '@/features/chores/chore-repository';
 import { createHouseholdFromSetup, deleteAllData, loadHouseholdView } from '@/features/household/household-service';
 import { getWeek } from '@/features/week-plan/week-plan-repository';
 import { applyChoreAction, buildNewPreview, confirmPreview } from '@/features/week-plan/week-plan-service';
+import { MIGRATIONS } from '@/infrastructure/database/migrations';
 
 jest.mock('expo-sqlite', () => require('../helpers/node-sqlite-mock'));
 jest.mock('expo-crypto', () => {
@@ -72,16 +73,16 @@ describe('validating a file', () => {
   const valid = async () => readBackup('2026-11-06T00:00:00.000Z');
 
   it('rejects files that are not ours', () => {
-    expect(parseBackup('not json', 1)).toEqual({ ok: false, problem: 'NOT_JSON' });
-    expect(parseBackup('{"app":"other"}', 1)).toEqual({ ok: false, problem: 'NOT_OURSHARE' });
-    expect(parseBackup('[]', 1)).toEqual({ ok: false, problem: 'NOT_OURSHARE' });
+    expect(parseBackup('not json', MIGRATIONS.length)).toEqual({ ok: false, problem: 'NOT_JSON' });
+    expect(parseBackup('{"app":"other"}', MIGRATIONS.length)).toEqual({ ok: false, problem: 'NOT_OURSHARE' });
+    expect(parseBackup('[]', MIGRATIONS.length)).toEqual({ ok: false, problem: 'NOT_OURSHARE' });
   });
 
   it('rejects a backup from a newer app', async () => {
     await makeData();
     const backup = await valid();
-    expect(parseBackup(JSON.stringify({ ...backup, schemaVersion: 99 }), 1)).toEqual({ ok: false, problem: 'NEWER_VERSION' });
-    expect(parseBackup(JSON.stringify({ ...backup, formatVersion: 2 }), 1)).toEqual({ ok: false, problem: 'NEWER_VERSION' });
+    expect(parseBackup(JSON.stringify({ ...backup, schemaVersion: 99 }), MIGRATIONS.length)).toEqual({ ok: false, problem: 'NEWER_VERSION' });
+    expect(parseBackup(JSON.stringify({ ...backup, formatVersion: 2 }), MIGRATIONS.length)).toEqual({ ok: false, problem: 'NEWER_VERSION' });
   });
 
   it('rejects missing tables, extra columns, odd values and two households', async () => {
@@ -98,7 +99,7 @@ describe('validating a file', () => {
     for (const change of variants) {
       const copy = structuredClone(backup);
       change(copy);
-      expect(parseBackup(JSON.stringify(copy), 1)).toEqual({ ok: false, problem: 'BROKEN' });
+      expect(parseBackup(JSON.stringify(copy), MIGRATIONS.length)).toEqual({ ok: false, problem: 'BROKEN' });
     }
   });
 

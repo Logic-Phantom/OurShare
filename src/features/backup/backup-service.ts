@@ -24,11 +24,16 @@ export function validateBackupText(text: string): { ok: true; backup: Backup } |
 export async function restoreBackup(backup: Backup): Promise<{ memberIds: string[] }> {
   const db = await getDb();
   await db.withTransactionAsync(async () => {
+    await db.runAsync('DELETE FROM sync_outbox');
     for (const table of [...BACKUP_TABLE_ORDER].reverse()) await db.runAsync(`DELETE FROM ${table}`);
     for (const table of BACKUP_TABLE_ORDER) {
       const columns = BACKUP_TABLES[table];
       const sql = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`;
-      for (const row of backup.tables[table]) await db.runAsync(sql, ...columns.map((column) => row[column] ?? null));
+      for (const row of backup.tables[table]) {
+        // A restored household is always this device's own copy: sharing is joined again by invite.
+        const values = table === 'household' ? { ...row, mode: 'LOCAL' } : row;
+        await db.runAsync(sql, ...columns.map((column) => values[column] ?? null));
+      }
     }
   });
   return { memberIds: backup.tables.member.filter((row) => row.is_active === 1 && row.deleted_at === null).map((row) => String(row.id)) };

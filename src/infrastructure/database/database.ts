@@ -6,7 +6,8 @@ const DB_NAME = 'ourshare.db';
 
 let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 
-async function migrate(db: SQLite.SQLiteDatabase): Promise<void> {
+/** Exported for tests that need more than one database (two phones sharing a household). */
+export async function migrate(db: SQLite.SQLiteDatabase): Promise<void> {
   await db.execAsync('PRAGMA foreign_keys = ON;');
   if (process.env.EXPO_OS !== 'web') await db.execAsync('PRAGMA journal_mode = WAL;');
   const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
@@ -62,6 +63,7 @@ export async function wipeAllTables(): Promise<void> {
   const db = await getDb();
   await db.withTransactionAsync(async () => {
     await db.execAsync(`
+      DELETE FROM sync_outbox;
       DELETE FROM activity_event;
       DELETE FROM scheduled_chore;
       DELETE FROM week_plan_target;
