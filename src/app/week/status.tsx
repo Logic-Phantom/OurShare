@@ -19,6 +19,10 @@ export default function WeekStatusScreen() {
   const { data } = useLoader(() => loadWeekScreen(localToday(), start), [start]);
   const summary = data?.summary;
   const members = data?.view.members ?? [];
+  const rank = (id: string) => {
+    const index = members.findIndex((member) => member.id === id);
+    return index < 0 ? Number.MAX_SAFE_INTEGER : index;
+  };
 
   return (
     <View style={[styles.flex, { backgroundColor: c.background }]}>
@@ -54,7 +58,10 @@ export default function WeekStatusScreen() {
             <View style={styles.section}>
               <AppText variant="sectionTitle">한 일</AppText>
               <Card style={styles.done}>
-                {summary.members.filter((row) => row.assignedCount > 0 || row.completedCount > 0).map((row) => {
+                {summary.members
+                  .filter((row) => row.assignedCount > 0 || row.completedCount > 0)
+                  .toSorted((a, b) => rank(a.memberId) - rank(b.memberId))
+                  .map((row) => {
                   const person = members.find((member) => member.id === row.memberId);
                   return (
                     <View key={row.memberId} style={styles.doneRow} accessible accessibilityLabel={`${person?.displayName ?? '이전 구성원'}, 맡은 일 ${row.assignedCount}개, 한 일 ${row.completedCount}개`}>
@@ -70,11 +77,8 @@ export default function WeekStatusScreen() {
 
             <HintCard icon="happy-outline">
               <AppText variant="body">
-                {summary.maxDeviation <= CLOSE_ENOUGH
-                  ? '목표 비율과 거의 같아요!'
-                  : data?.stored?.chores.some((chore) => chore.assignmentOrigin !== 'AUTO')
-                    ? '고정이나 직접 정한 일이 있고, 일을 딱 맞게 나눌 수 없어 목표와 차이가 있어요. 일정 수정하기에서 바꿀 수 있어요.'
-                    : '일을 딱 맞게 나눌 수 없어 목표와 차이가 있어요. 일정 수정하기에서 바꿀 수 있어요.'}
+                {/* The cause (fixed chores, last week's correction, chores that cannot split evenly) is not known here, so none is claimed. */}
+                {summary.maxDeviation <= CLOSE_ENOUGH ? '목표 비율과 거의 같아요!' : '목표 비율과 조금 차이가 있어요. 일정 수정하기에서 담당자를 바꿀 수 있어요.'}
               </AppText>
             </HintCard>
           </>

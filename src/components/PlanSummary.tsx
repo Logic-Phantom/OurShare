@@ -8,7 +8,14 @@ import { AppText, Card, MemberAvatar, ShareBar, spacing } from '@/design-system'
 /** Target and actual side by side, plus the reasons. The gap is stated, never judged. */
 export function PlanSummary({ summary, members, notes }: { summary: WeekSummary; members: readonly HouseholdMember[]; notes?: readonly PlanNote[] }) {
   const member = (id: string) => members.find((candidate) => candidate.id === id);
-  const rows = summary.members.filter((row) => row.assignedCount > 0 || row.targetSharePercent > 0);
+  // Same order as the members list everywhere else; people no longer in the household go last.
+  const order = (id: string) => {
+    const index = members.findIndex((candidate) => candidate.id === id);
+    return index < 0 ? Number.MAX_SAFE_INTEGER : index;
+  };
+  const rows = summary.members
+    .filter((row) => row.assignedCount > 0 || row.targetSharePercent > 0)
+    .toSorted((a, b) => order(a.memberId) - order(b.memberId));
   const shares = rows.map((row) => ({ name: member(row.memberId)?.displayName ?? '이전 구성원', percent: row.assignedShareDisplay }));
   return (
     <Card style={styles.card}>

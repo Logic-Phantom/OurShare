@@ -51,6 +51,7 @@ npm run simulate
 | [PRIVACY](docs/PRIVACY.md) | 데이터, 권한, 스토어 신고 초안 |
 | [LICENSES](docs/LICENSES.md) | 라이선스, 자산, 앱 이름 확인 |
 | [COSTS_AND_DISTRIBUTION](docs/COSTS_AND_DISTRIBUTION.md) | 비용, 스토어 요건, 출시 체크리스트 |
+| [STORE_LISTING](docs/STORE_LISTING.md) | 스토어 문구, 그래픽, 데이터 보안·개인정보·연령 등급 답변, 심사 메모 |
 
 ## 다른 PC에서 이어서 하기
 
@@ -89,7 +90,7 @@ npm test
 npm run web
 ```
 
-여기까지 테스트 94개가 통과하고, 브라우저에 온보딩 화면이 나오면 정상입니다.
+여기까지 테스트 124개가 통과하고, 브라우저에 온보딩 화면이 나오면 정상입니다.
 
 `.env` 파일 없이 동작합니다. 앱 데이터는 기기나 브라우저 안에만 있어 PC를 옮기면 넘어가지 않으며, 온보딩부터 다시 입력하면 됩니다. `android/`, `ios/`, `.device/`는 git에 없고, `android/`와 `ios/`는 빌드할 때 생성됩니다.
 
@@ -100,7 +101,7 @@ npm run web
 3. [docs/DECISIONS.md](docs/DECISIONS.md): 슈퍼프롬프트와 달라진 결정. 충돌하면 이 문서가 우선입니다.
 4. [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)와 [시안](docs/design/reference-screens.webp): 화면 대응표
 
-Claude Code에서 이어갈 때는 저장소를 연 뒤 "README의 이어서 하기를 읽고 단계 3을 진행해"라고 요청하면 됩니다. 이전 대화는 넘어가지 않지만, 필요한 내용은 위 문서에 있습니다.
+Claude Code에서 이어갈 때는 저장소를 연 뒤 "README의 이어서 하기를 읽고 다음 할 일을 진행해"라고 요청하면 됩니다. 이전 대화는 넘어가지 않지만, 필요한 내용은 위 문서에 있습니다.
 
 ### 4. 진행 상황
 
@@ -116,27 +117,40 @@ Claude Code에서 이어갈 때는 저장소를 연 뒤 "README의 이어서 하
 
 **실기기 확인 (가장 먼저).** 웹과 네이티브는 SQLite 구현이 다르고, 알림·백업·공유 시트는 웹에서 확인할 수 없습니다.
 
-- [ ] Android 개발 빌드 설치: 로컬은 `npx expo run:android`(JDK 17, Android SDK), 또는 `eas build --profile development`(EAS 무료 한도 사용, `eas.json`은 아직 없음)
+- [ ] Android 설치: 로컬은 아래 "로컬 Android 빌드"의 APK를 `adb install`, 또는 `npx eas-cli@latest build --profile preview --platform android`(EAS 무료 한도 사용)
 - [ ] `scripts/android-device.ps1`을 딸깍에서 가져와 수정
 - [ ] 한 주 전체 시나리오, 앱 재시작 후 유지
 - [ ] 알림: 권한 승인·거부·나중에 켜기, 실제 수신 시간, 알림 눌러 일정 열기, 재부팅 후 유지
 - [ ] 백업 만들기 → 데이터 삭제 → 복원, 일정 공유 시트
 - [ ] 글자 크기 최대, TalkBack, 작은 화면
-- [ ] 병합된 매니페스트 권한 확인 (POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, INTERNET만 있어야 함)
 
-**출시 (단계 5)**
+**출시 (단계 5).** 준비물(`eas.json`, iOS 개인정보 매니페스트, 스토어 문구·양식 답변, 스크린샷·그래픽)은 2026-11-06에 마쳤습니다. 남은 순서는 [docs/COSTS_AND_DISTRIBUTION.md](docs/COSTS_AND_DISTRIBUTION.md)의 체크리스트를 위에서부터 따릅니다.
 
-- [ ] `eas init`(새 EAS 프로젝트), `eas.json` 작성 (기존 앱 구성 참고)
-- [ ] iOS: EAS 빌드 → TestFlight 실기기 확인, 개인정보 매니페스트 확인
-- [ ] 스토어 등록 정보, 스크린샷, 데이터 보안·앱 개인정보 양식 ([docs/COSTS_AND_DISTRIBUTION.md](docs/COSTS_AND_DISTRIBUTION.md))
-- [ ] 정책 문구 최종 검토, `npm run legal:site`, GitHub Pages 공개
+**로컬 Android 빌드** (EAS 한도를 쓰지 않음, 디버그 키 서명이라 테스트 전용)
+
+```bash
+npx expo prebuild -p android --no-install && git checkout package.json
+```
+
+```bash
+cd android && JAVA_HOME="/c/Program Files/Microsoft/jdk-17.0.20.101-hotspot" ANDROID_HOME='C:\eclipse_AI\.android-sdk' ANDROID_SDK_ROOT='C:\eclipse_AI\.android-sdk' GRADLE_USER_HOME="C:/eclipse_AI/.gradle-home" TEMP='C:\eclipse_AI\.tmp' TMP='C:\eclipse_AI\.tmp' JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=C:/eclipse_AI/.tmp" ./gradlew.bat assembleRelease
+```
+
+결과는 `android/app/build/outputs/apk/release/app-release.apk`입니다. **Windows 사용자 경로에 한글이 있으면** Gradle 캐시, 임시 폴더, Android SDK를 모두 영문 경로로 가리켜야 합니다. 그렇지 않으면 `react-native-screens`·`react-native-worklets`의 C++ 단계(prefab, NDK clang)가 깨진 경로 때문에 실패합니다(2026-11-06 확인). `C:\eclipse_AI\.android-sdk`는 실제 SDK 폴더를 가리키는 Junction입니다. 새 PC에서는 `mklink /J C:\eclipse_AI\.android-sdk "%LOCALAPPDATA%\Android\Sdk"`로 만들고, 실패한 빌드가 남긴 `node_modules/*/android/.cxx` 폴더는 지운 뒤 다시 빌드합니다.
+
+**2026-11-06 기준 이 PC에서는 로컬 릴리스 빌드가 끝까지 되지 않았습니다.** 위 조치 외에 CMake도 영문 경로(`C:\eclipse_AI\.tools\cmake-3.22.1`)로 복사해 `android/local.properties`의 `cmake.dir`로 지정하니, 라이브러리 C++ 빌드까지는 통과했습니다. 마지막 앱 C++ 단계에서 `react-native-gesture-handler`의 중간 파일 경로가 Windows 경로 길이 제한(260자)을 넘어 실패했습니다. 다음 중 하나가 필요합니다.
+- 소유자가 관리자 권한으로 Windows 긴 경로를 허용 (`LongPathsEnabled`), 재부팅 후 다시 빌드
+- EAS 클라우드 빌드 사용 (`eas init` 후 `--profile preview`)
+
+**스토어 그래픽 다시 만들기:** `python scripts/build-store-graphics.py`, 스크린샷은 `npm run web`을 띄운 뒤 `node scripts/store-screenshots.mjs`.
 
 ### 6. 소유자가 직접 할 일
 
 - [ ] [KIPRIS](https://www.kipris.or.kr)에서 "우리몫", "OurShare" 상표 검색
 - [ ] 앱 아이콘의 제작 출처와 상업적 이용 가능 여부 확인
 - [ ] 일러스트 원본이 있으면 전달 (없으면 현재 SVG 사용)
-- [ ] 출시 전: 지원 이메일과 개인정보 문의 담당 이름 결정, `eas init`, GitHub Pages 켜기, Apple Developer 가입 상태 확인, Play 테스터 12명 × 14일 준비
+- [ ] 앱 이름("우리몫 - 집안일 분담" 초안)과 [스토어 문구](docs/STORE_LISTING.md) 확정
+- [ ] 출시 전: 지원 이메일과 개인정보 문의 담당 이름 결정, `eas init` 승인, GitHub Pages 켜기, Apple Developer 가입 상태 확인, Play 테스터 12명 × 14일 준비
 
 자세한 체크리스트는 [docs/COSTS_AND_DISTRIBUTION.md](docs/COSTS_AND_DISTRIBUTION.md)에 있습니다.
 
@@ -181,3 +195,7 @@ Claude Code에서 이어갈 때는 저장소를 연 뒤 "README의 이어서 하
 - 실행: `npx tsc --noEmit` 통과, `npx expo lint` 통과, `npx jest` 124개 통과, `npx expo-doctor` 20개 항목 통과, `npm run licenses` 63개 패키지 감사 통과(MIT 62, ISC 1), `npm run legal:site`는 임시 연락처로 3개 페이지 생성 확인 후 삭제(실제 연락처 없음).
 - 웹 미리보기(다크 모드)에서 확인: 홈·설정·정책·오픈소스·백업 화면 표시, 웹에서 알림과 백업이 지원되지 않는다는 안내.
 - 미실행: 실기기 알림 수신·재부팅, 백업 파일 공유와 복원, 글자 확대·스크린리더, 병합된 매니페스트 확인.
+- 출시 준비: `eas.json`(preview·production), `app.json`에 iOS 개인정보 매니페스트(설치된 패키지의 `PrivacyInfo.xcprivacy` 11개에서 필수 사유 API를 모음, 추적·수집 없음)와 버전 1.0.0, 스토어 등록 문구와 데이터 보안·앱 개인정보·연령 등급 답변·심사 메모(`docs/STORE_LISTING.md`), 출시 순서 체크리스트, 스크린샷 8장(헤드리스 Edge로 실제 앱 화면을 1320×2868로 캡처, `scripts/store-screenshots.mjs`), Play 그래픽 이미지와 512 아이콘(`scripts/build-store-graphics.py`).
+- 스크린샷을 보다 찾아 고친 문제: 현황 화면의 구성원 순서가 저장 순서에 따라 바뀌던 문제, 현황 화면이 차이의 원인을 잘못 단정하던 문구(D-066 수정).
+- 로컬 Android 릴리스 빌드: `expo prebuild` 성공. `gradlew assembleRelease`는 4번 시도해 모두 실패. 한글 사용자 경로 때문에 임시 폴더, SDK, CMake 경로를 차례로 영문 경로로 옮겨 라이브러리 C++ 빌드까지는 통과했고, 마지막에 Windows 경로 길이 제한(260자)으로 실패. APK와 최종 매니페스트는 미확인.
+- EAS: 계정 `lcm2`로 로그인 확인. `eas init`과 EAS 빌드는 승인 전이라 실행하지 않음.

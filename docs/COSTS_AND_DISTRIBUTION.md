@@ -29,35 +29,45 @@
 
 ## 출시 체크리스트
 
-### 소유자만 할 수 있는 일
+순서대로 진행합니다. **굵은 항목**은 소유자만 할 수 있습니다. 스토어 문구·양식 답변은 [STORE_LISTING.md](STORE_LISTING.md)에 있습니다.
 
-- [ ] KIPRIS 상표 검색 ([LICENSES.md](LICENSES.md))
-- [ ] 아이콘 제작 출처와 상업적 이용 가능 여부 확인
-- [ ] 지원 이메일과 개인정보 문의 담당 이름 결정 (`.env.local`, git 제외)
-- [ ] `eas init`으로 새 EAS 프로젝트 연결 (또는 Claude가 실행할 수 있게 로그인 상태 확인)
-- [ ] `.env.local`에 연락처를 넣고 `npm run legal:site` 실행 → `docs/legal/` 커밋
-- [ ] GitHub Pages 켜기: Settings → Pages → `main` `/docs`
-- [ ] Apple Developer 가입 상태 확인
-- [ ] **Play 테스터 12명 × 14일 연속 비공개 테스트** (2023-11-13 이후 만든 개인 계정. 프로덕션 신청 후 심사는 보통 7일 이내). 조직 계정이면 해당 없음. 이미 프로덕션 권한을 받은 계정에서 앱마다 다시 필요한지는 2차 자료가 앱 단위라고 하지만 공식 문구에서 확정하지 못했으므로 Play Console에서 확인
+### 1. 준비 (출시 전 아무 때나)
 
-### 구현 후 확인
+- [ ] **KIPRIS 상표 검색** ([LICENSES.md](LICENSES.md))
+- [ ] **아이콘 제작 출처와 상업적 이용 가능 여부 확인**
+- [ ] **앱 이름 확정**: 초안은 "우리몫 - 집안일 분담"
+- [ ] **스토어 문구 확인**: [STORE_LISTING.md](STORE_LISTING.md)의 설명·키워드·카테고리
+- [ ] **지원 이메일과 개인정보 문의 담당 이름을 `.env.local`에 입력** (git 제외)
+- [ ] 정책 문구 최종 검토 후 `npm run legal:site` → `docs/legal/` 커밋·푸시
+- [ ] **GitHub Pages 켜기**: 저장소 Settings → Pages → `main` `/docs` → 처리방침 URL이 열리는지 확인
 
-- [ ] 처리방침 URL 공개: `https://logic-phantom.github.io/OurShare/legal/privacy.html`. 양 스토어와 앱 안에 모두 링크. 수집 데이터가 없어도 필수
-- [x] 약관, 오픈소스 고지 화면 (2026-11-06, 초안. 출시 전 문구 검토 필요)
-- [x] 라이선스 감사 통과 (2026-11-06, 63개 모두 MIT·ISC. 패키지 변경 시 재실행)
-- [ ] 병합된 Android 매니페스트 권한 확인
-- [ ] iOS 개인정보 매니페스트(Privacy Manifest) 빌드 산출물 확인. 이번 조사에서 최신 요건을 확정하지 못해 제출 전 재확인
-- [ ] 아이콘: iOS 1024 정사각·투명 없음, Android 적응형 안전 영역·모노크롬
-- [ ] 실기기: 재시작 유지, 알림 승인·거부·재부팅, 복원, 글자 확대, TalkBack, VoiceOver
+### 2. 빌드
 
-### 스토어 양식
+- [x] `eas.json` (2026-11-06: preview는 내부 테스트용 APK, production은 스토어용, 빌드 번호는 EAS가 자동 증가)
+- [x] iOS 개인정보 매니페스트를 `app.json`에 작성 (2026-11-06, 설치된 패키지 기준)
+- [ ] `npx eas-cli@latest init`으로 새 EAS 프로젝트 연결 (계정 `lcm2`, 원격 프로젝트가 생김)
+- [ ] `npx eas-cli@latest build --profile preview --platform android` → 실기기 확인 (무료 한도 사용)
+- [ ] **Apple Developer 가입 확인** → `npx eas-cli@latest build --profile production --platform ios` → TestFlight 실기기 확인
+- [ ] 실기기: 재시작 유지, 알림 승인·거부·재부팅, 백업·복원, 공유 시트, 글자 확대, TalkBack, VoiceOver
+- [ ] iOS 빌드에 포함된 개인정보 매니페스트 확인 (Apple이 누락을 메일로 알려 줌)
 
-| 항목 | 값 |
-|---|---|
-| 배포 국가 | 대한민국만 |
-| Google Play 데이터 보안 | [PRIVACY.md](PRIVACY.md) 초안 |
-| Apple 앱 개인정보 | Data Not Collected |
-| Apple DSA 판매자 상태 | EU 미배포. 제출 시 묻는 경우 비상업 개인으로 답변 (Apple 안내에 따라 확인) |
-| 연령 등급 | 양 스토어 설문 작성, 전체 이용가 예상. 게임이 아니므로 게임 등급 번호 불필요. Apple은 2026년 등급 설문이 개편됐으므로 최신 문항으로 답변 |
-| 계정 삭제 | 계정 없음, 해당 없음 |
-| Apple 최소 기능(4.2) | 웹 포장 앱이 아닌 네이티브 기능 제공, 문제 없음 예상 |
+### 3. Google Play
+
+- [ ] **Play Console에서 앱 만들기** (패키지 `app.ourshare.mobile`, 무료, 대한민국)
+- [ ] 스토어 등록정보, 그래픽, 데이터 보안, 콘텐츠 등급, 타겟 연령, 앱 액세스, 광고 없음 입력
+- [ ] `npx eas-cli@latest build --profile production --platform android` (AAB) 업로드
+- [ ] **비공개 테스트: 테스터 12명 이상 × 14일 연속** (2023-11-13 이후 만든 개인 계정). 조직 계정이면 해당 없음. 앱마다 다시 필요한지는 Play Console에서 확인
+- [ ] 프로덕션 액세스 신청 → 심사 (보통 7일 이내)
+
+### 4. App Store
+
+- [ ] **App Store Connect에서 앱 만들기** (번들 ID `app.ourshare.mobile`)
+- [ ] 이름·부제·설명·키워드·스크린샷(6.9인치), 앱 개인정보(수집 안 함), 연령 등급 설문, 수출 규정, DSA 질문, 심사 메모 입력
+- [ ] TestFlight 빌드 제출 → 심사
+
+### 확인 완료
+
+- [x] 약관, 오픈소스 고지 화면 (2026-11-06, 초안)
+- [x] 라이선스 감사 (2026-11-06, 63개 모두 MIT·ISC. 패키지 변경 시 `npm run licenses`)
+- [x] 아이콘: iOS 1024 정사각·투명 없음, Android 적응형 안전 영역·모노크롬, 알림 아이콘 (스크립트 생성)
+- [x] 스토어 그래픽: 스크린샷 8장(1320×2868), Play 그래픽 이미지, 512 아이콘 (2026-11-06)
