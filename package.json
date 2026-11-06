@@ -14,7 +14,8 @@
     "web": "expo start --web",
     "build:icons": "python scripts/build-app-icons.py",
     "licenses": "expo export --platform android --source-maps --output-dir dist-licenses && node scripts/generate-oss-licenses.mjs dist-licenses",
-    "legal:site": "node scripts/build-legal-site.mjs"
+    "legal:site": "node scripts/build-legal-site.mjs",
+    "test:sql": "node --test tests/server/sharing.test.mjs"
   },
   "jest": {
     "preset": "jest-expo",
@@ -54,6 +55,7 @@
     "react-native-web": "^0.21.4"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",

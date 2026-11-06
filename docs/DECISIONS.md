@@ -87,6 +87,12 @@ D-023 근거: A 60, B 40, 고정 A 1점, 고정 B 2점, 자동 5·3·1점이면 
 | D-079 | 계정 삭제 페이지 | 계정이 없어 만들지 않음. 공유 모드를 추가할 때 함께 만듦 |
 | D-080 | EAS 프로젝트와 서명 키 | 2026-11-06 소유자 승인으로 `@lcm2/ourshare`(ID `48518d88-1984-4c34-a1e9-b31c7a19ff06`) 생성. Android 업로드 키는 첫 빌드 때 EAS가 만들어 서버에 보관. 잃으면 업데이트를 올릴 수 없으므로 `eas credentials`로 백업을 내려받아 따로 보관할 것 |
 | D-081 | 알림 라이브러리가 덧붙인 권한 | 첫 EAS 빌드 APK를 확인하니 원격 푸시(`c2dm.RECEIVE`), 설치 경로(`BIND_GET_INSTALL_REFERRER_SERVICE`), 제조사별 배지 권한 18개가 들어 있었음. 원격 푸시와 배지를 쓰지 않으므로 `blockedPermissions`로 차단. Firebase 구성 요소는 남아 있지만 `google-services.json`이 없어 초기화되지 않고 통신하지 않음 |
+| D-090 | 공유 모드 출시 시점 | 2026-11-06 소유자 결정으로 첫 출시에 포함(D-009 변경). 설계는 [SHARING.md](SHARING.md) |
+| D-091 | 공유 계정 방식 | 익명 로그인 + 초대 코드. 이메일을 받지 않고, Apple 로그인 의무와 메일 서버 비용이 없음. 기기를 바꾸면 다시 초대받아야 하는 한계를 화면에서 안내 |
+| D-092 | 실시간 연결 | 쓰지 않음. 무료 플랜 동시 연결 200개 제한과 배터리를 고려해 앱 시작·복귀·변경 후·30초 간격으로 동기화 |
+| D-093 | 동기화 방식 | 화면은 계속 SQLite만 읽음. SQLite 트리거로 변경을 모으고, 행 단위 서버 버전으로 충돌을 감지해 서버 값을 따르고 알림. 쓰기는 RPC로만 |
+| D-094 | 서버 위치 | Supabase 서울 리전(ap-northeast-2). 처리방침에는 수탁자(미국 회사)와 국외 이전 가능성을 함께 적음 |
+| D-095 | 공유 모드 연령 | 만 14세 이상만 공유 시작·참여. 기기 안 기능은 누구나 |
 | D-066 | 현황 화면의 차이 설명 | 원인을 말하지 않고 차이가 있다는 사실과 바꾸는 방법만 안내. 현황 화면은 원인(고정 담당, 지난주 보정, 나눌 수 없는 단위)을 알 수 없어 단정하면 틀릴 수 있음. 원인은 배정 미리보기에서 설명 |
 
 ## 기본값
@@ -101,3 +107,5 @@ D-023 근거: A 60, B 40, 고정 A 1점, 고정 B 2점, 자동 5·3·1점이면 
 - Google Play: [대상 API](https://support.google.com/googleplay/android-developer/answer/11926878), [개인 계정 테스트](https://support.google.com/googleplay/android-developer/answer/14151465), [사용자 데이터](https://support.google.com/googleplay/android-developer/answer/10144311), [데이터 보안](https://support.google.com/googleplay/android-developer/answer/10787469), [계정 삭제](https://support.google.com/googleplay/android-developer/answer/13327111), [정확한 알람](https://support.google.com/googleplay/android-developer/answer/13161072), [등록비](https://support.google.com/googleplay/android-developer/answer/6112435)
 - Apple: [심사 지침](https://developer.apple.com/app-store/review/guidelines/), [SDK 요구사항](https://developer.apple.com/news/upcoming-requirements/), [DSA 판매자](https://developer.apple.com/help/app-store-connect/manage-compliance-information/manage-eu-digital-services-act-compliance-information), [개발자 프로그램](https://developer.apple.com/programs/)
 - Supabase: [Free 프로젝트 일시 중지](https://supabase.com/kb/faqs/platform/free-project-pausing)
+- Supabase (2026-11-06 재확인): [요금](https://supabase.com/pricing) Free는 활성 프로젝트 2개, DB 500MB, 전송 5GB, MAU 5만, Realtime 동시 200·월 200만 메시지, Edge Functions 50만 회, 1주일 미사용 시 일시 정지·1년 안 복원 가능. [익명 로그인](https://supabase.com/docs/guides/auth/auth-anonymous) 모든 플랜, IP당 시간당 30회, CAPTCHA 권장, 자동 정리 없음. [리전](https://supabase.com/docs/guides/platform/regions) 서울 지원. [SMTP](https://supabase.com/docs/guides/auth/auth-smtp) 기본 발송은 운영용 아님(시간당 2통). [약관](https://supabase.com/terms) 2(a) "내부 업무 목적" 문구.
+- 스토어 (2026-11-06 재확인): Apple 4.8·5.1.1(i)(ii)(v), Play [계정 삭제](https://support.google.com/googleplay/android-developer/answer/13327111)(앱에서 계정을 만들면 앱 안 삭제와 웹 링크 필수, 오프라인 계정은 제외), [데이터 보안](https://support.google.com/googleplay/android-developer/answer/10787469)(서버로 보내면 "수집", 서비스 제공자 전송은 "공유" 아님)
