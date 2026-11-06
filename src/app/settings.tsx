@@ -10,6 +10,8 @@ import { deleteAllData, loadHouseholdView, saveHouseholdSettings } from '@/featu
 import { SUPPORT_EMAIL } from '@/features/legal/documents';
 import { useAppState } from '@/hooks/app-state';
 import { useLoader } from '@/hooks/use-loader';
+import { leaveSharing } from '@/features/sync/sharing-service';
+import { useSync } from '@/hooks/sync-state';
 import { cancelAll } from '@/infrastructure/notifications/local-notifications';
 import { logError } from '@/utils/log';
 
@@ -27,6 +29,7 @@ export default function SettingsScreen() {
   const c = useColors();
   const router = useRouter();
   const { notifyDataChanged, resetSettings, settings, updateSettings } = useAppState();
+  const { sharing, refresh } = useSync();
   const { data } = useLoader(loadHouseholdView);
   const [confirmingWipe, setConfirmingWipe] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -46,8 +49,11 @@ export default function SettingsScreen() {
   const wipe = async () => {
     setConfirmingWipe(false);
     try {
+      // In a shared household this phone leaves first, so the others keep their data.
+      if (sharing) await leaveSharing();
       await deleteAllData();
       await cancelAll();
+      await refresh();
       resetSettings();
       // Clear the stack first, or back would return to tabs that have no data behind them.
       if (router.canDismiss()) router.dismissAll();
@@ -92,11 +98,16 @@ export default function SettingsScreen() {
           <Switch value={settings.celebrationEnabled} onValueChange={(celebrationEnabled) => updateSettings({ celebrationEnabled })} accessibilityLabel="완료 축하 화면 보기" />
         </View>
 
+        <View style={styles.group}>
+          <AppText variant="sectionTitle">함께 쓰기</AppText>
+          <ValueRow label={sharing ? '공유 중' : '다른 휴대폰과 함께 쓰기'} value="" onPress={() => router.push('/sharing')} />
+        </View>
+
         <ReminderSettingsSection />
 
         <View style={styles.group}>
           <AppText variant="sectionTitle">데이터</AppText>
-          <AppText variant="caption" tone="secondary">모든 내용은 이 기기 안에만 저장돼요.</AppText>
+          <AppText variant="caption" tone="secondary">{sharing ? '이 기기에 저장되고, 같은 집 구성원의 기기와 서버를 통해 맞춰져요.' : '모든 내용은 이 기기 안에만 저장돼요.'}</AppText>
           <ValueRow label="백업과 복원" value="" onPress={() => router.push('/backup')} />
           <SecondaryButton label="모든 데이터 삭제" tone="danger" onPress={() => setConfirmingWipe(true)} testID="wipe-data" />
         </View>
@@ -118,7 +129,7 @@ export default function SettingsScreen() {
       <ConfirmDialog
         visible={confirmingWipe}
         title="모든 데이터를 삭제할까요?"
-        message="집, 구성원, 집안일, 일정, 완료 기록이 이 기기에서 모두 지워져요. 되돌릴 수 없어요."
+        message={sharing ? '이 기기는 공유를 그만두고, 이 기기의 집·구성원·집안일·일정·완료 기록을 모두 지워요. 다른 구성원의 기기에는 그대로 남아요. 마지막 구성원이면 서버 데이터도 지워져요.' : '집, 구성원, 집안일, 일정, 완료 기록이 이 기기에서 모두 지워져요. 되돌릴 수 없어요.'}
         confirmLabel="모두 삭제"
         danger
         onConfirm={wipe}

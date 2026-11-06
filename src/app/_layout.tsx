@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ReminderSync } from '@/components/ReminderSync';
 import { darkColors, ErrorState, fonts, lightColors, useColors } from '@/design-system';
 import { AppStateProvider, useAppState } from '@/hooks/app-state';
+import { SyncProvider } from '@/hooks/sync-state';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -28,7 +29,9 @@ function StartupEffects() {
   }, [ready]);
   useEffect(() => {
     if (!ready || dbError || settings.onboardingDone) return;
-    if (segments[0] !== 'onboarding') router.replace('/onboarding');
+    // Joining by invite (also from an invite link) and the policy pages are allowed before setup.
+    const first = segments[0] as string | undefined;
+    if (first !== 'onboarding' && first !== 'join' && first !== 'legal') router.replace('/onboarding');
   }, [ready, dbError, settings.onboardingDone, segments, router]);
   return null;
 }
@@ -61,6 +64,8 @@ function Navigator() {
       <Stack.Screen name="completed" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
       <Stack.Screen name="backup" />
       <Stack.Screen name="legal/[doc]" />
+      <Stack.Screen name="sharing" />
+      <Stack.Screen name="join" />
     </Stack>
   );
 }
@@ -77,10 +82,12 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider value={{ ...navTheme, colors: { ...navTheme.colors, background: c.background, card: c.surface, text: c.textPrimary, primary: c.greenDark, border: c.border } }}>
         <AppStateProvider>
-          <StartupEffects />
-          <ReminderSync />
-          <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-          <Navigator />
+          <SyncProvider>
+            <StartupEffects />
+            <ReminderSync />
+            <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+            <Navigator />
+          </SyncProvider>
         </AppStateProvider>
       </ThemeProvider>
     </SafeAreaProvider>

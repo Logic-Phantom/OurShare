@@ -43,6 +43,7 @@ export default function WelcomeScreen() {
           <>
             <PrimaryButton label="시작하기" onPress={() => router.push('/onboarding/members')} testID="start" />
             <StepDots current={0} total={3} />
+            <TextButton label="초대 코드로 참여하기" onPress={() => router.push('/join')} testID="open-join" />
             <TextButton label="건너뛰기" onPress={skip} testID="skip" />
           </>
         }>

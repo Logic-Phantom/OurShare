@@ -11,6 +11,7 @@ import type { HouseholdMember, SharePreset } from '@/domain/models';
 import { listChores } from '@/features/chores/chore-repository';
 import { addMember, deactivateMember, loadHouseholdView, reactivateMember, saveMemberProfile, saveShares, type MemberProfile } from '@/features/household/household-service';
 import { useAppState } from '@/hooks/app-state';
+import { useSync } from '@/hooks/sync-state';
 import { useLoader } from '@/hooks/use-loader';
 import { logError } from '@/utils/log';
 
@@ -35,6 +36,7 @@ export default function HouseholdScreen() {
   const c = useColors();
   const router = useRouter();
   const { settings, updateSettings, notifyDataChanged } = useAppState();
+  const { sharing } = useSync();
   const { data, error, reload } = useLoader(async () => {
     const view = await loadHouseholdView();
     return view ? { ...view, chores: await listChores(view.household.id) } : null;
@@ -133,6 +135,7 @@ export default function HouseholdScreen() {
             </InlineMessage>
           ))}
         {active.length === 0 && data ?<InlineMessage tone="warning">구성원이 없어요. 자동 배정을 하려면 한 명 이상 있어야 해요.</InlineMessage> : null}
+        {sharing && !settings.meMemberId && active.length > 0 ? <InlineMessage tone="warning">{'이 휴대폰을 쓰는 사람 오른쪽의 별을 눌러 왕관으로 바꿔 주세요. 내 차례 알림에 쓰여요.'}</InlineMessage> : null}
         {failed ? <InlineMessage tone="warning">저장하지 못했어요. 다시 시도해 주세요.</InlineMessage> : null}
 
         {inactive.length > 0 ? (

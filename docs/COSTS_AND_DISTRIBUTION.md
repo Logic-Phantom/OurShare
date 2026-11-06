@@ -14,7 +14,7 @@
 | Google Play | $25 1회 | 기존 계정이 있으면 추가 없음 |
 | Apple Developer | $99/년 | iOS 출시와 TestFlight에 필수 |
 | 서버 | 0원 | MVP에 없음 |
-| Supabase | 0원, 공유 모드 때만 | Free는 프로젝트 2개, DB 500MB, 활동이 적으면 일시 중지. 2차 자료 기준 수치라 도입 때 재확인. 기존 앱이 이미 슬롯을 쓰는지 확인 |
+| Supabase Free | 0원 | 2026-11-06 공식 확인: 활성 프로젝트 2개, DB 500MB, 전송 5GB, MAU 5만, 익명 로그인 포함, Realtime 미사용. 1주일 미사용 시 일시 정지(1년 안 복원). 사용자가 늘어 한도나 정지가 문제되면 Pro $25/월 |
 | 정책 페이지 | 0원 | GitHub Pages |
 
 ## 기술 요건 충족 여부
@@ -40,6 +40,16 @@
 - [ ] **지원 이메일과 개인정보 문의 담당 이름을 `.env.local`에 입력** (git 제외)
 - [ ] 정책 문구 최종 검토 후 `npm run legal:site` → `docs/legal/` 커밋·푸시
 - [ ] **GitHub Pages 켜기**: 저장소 Settings → Pages → `main` `/docs` → 처리방침 URL이 열리는지 확인
+
+### 1-1. 공유 서버 (Supabase)
+
+- [ ] **Supabase 대시보드에서 남은 무료 프로젝트 자리 확인** (활성 2개까지, CutPick 등이 쓰는 중일 수 있음)
+- [ ] 새 프로젝트 `ourshare`, 리전 **Northeast Asia (Seoul)**. 데이터베이스 비밀번호는 소유자가 직접 생성·보관
+- [ ] SQL Editor에서 `supabase/migrations/20261106000000_sharing.sql` 실행
+- [ ] Authentication > Sign In / Providers에서 **Anonymous sign-ins 켜기**, 이메일 가입은 끄기
+- [ ] Database > Extensions에서 `pg_cron` 켜고 `select cron.schedule('ourshare-cleanup', '0 3 * * *', 'select public.cleanup_stale()');`
+- [ ] Project URL과 publishable key를 `.env.local`과 EAS 환경 변수(preview·production)에 등록. service_role 키는 넣지 않음
+- [ ] 두 기기로 공유 시작 → 초대 → 참여 → 서로 체크 확인
 
 ### 2. 빌드
 

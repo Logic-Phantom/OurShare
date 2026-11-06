@@ -1,4 +1,5 @@
-// Publishes the in-app policy texts as static pages for the store listings (privacy policy URL).
+// Publishes the in-app policy texts as static pages for the store listings (privacy policy URL,
+// Google Play account-deletion URL).
 // Output: docs/legal/*.html, served by GitHub Pages
 // ("Deploy from a branch" → main /docs) at https://<owner>.github.io/OurShare/legal/<page>.html
 //
@@ -7,7 +8,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
-import { buildPolicyDocs } from '../src/features/legal/policy-texts.ts';
+import { buildAccountDeletionDoc, buildPolicyDocs } from '../src/features/legal/policy-texts.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const OUT = join(ROOT, 'docs/legal');
@@ -57,7 +58,7 @@ ${doc.sections.map((s) => `<section><h2>${esc(s.heading)}</h2><p>${linkify(s.bod
 `;
 }
 
-const docs = buildPolicyDocs(contact);
+const docs = { ...buildPolicyDocs(contact), 'account-deletion': buildAccountDeletionDoc(contact) };
 mkdirSync(OUT, { recursive: true });
 for (const [name, doc] of Object.entries(docs)) writeFileSync(join(OUT, `${name}.html`), page(doc));
 writeFileSync(

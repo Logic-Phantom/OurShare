@@ -6,6 +6,7 @@ import { AppText, ConfirmDialog, InlineMessage, PrimaryButton, Screen, ScreenHea
 import { BACKUP_PROBLEM_TEXT, backupFileName, backupSummary, MAX_BACKUP_BYTES, type Backup } from '@/features/backup/backup-format';
 import { readBackup, restoreBackup, validateBackupText } from '@/features/backup/backup-service';
 import { useAppState } from '@/hooks/app-state';
+import { useSync } from '@/hooks/sync-state';
 import { backupFilesSupported, pickTextFile, shareTextFile } from '@/infrastructure/files/backup-files';
 import { localToday } from '@/utils/dates';
 import { logError } from '@/utils/log';
@@ -14,6 +15,7 @@ export default function BackupScreen() {
   const c = useColors();
   const router = useRouter();
   const { settings, updateSettings, notifyDataChanged } = useAppState();
+  const { sharing } = useSync();
   const [message, setMessage] = useState<{ tone: 'info' | 'warning'; text: string } | null>(null);
   const [pending, setPending] = useState<Backup | null>(null);
   const [busy, setBusy] = useState(false);
@@ -34,6 +36,7 @@ export default function BackupScreen() {
 
   const pick = async () => {
     setMessage(null);
+    if (sharing) return setMessage({ tone: 'warning', text: '공유 중에는 복원할 수 없어요. 복원하면 다른 구성원의 일정까지 바뀌기 때문이에요. 설정 > 함께 쓰기에서 먼저 공유를 그만둬 주세요.' });
     try {
       const picked = await pickTextFile(MAX_BACKUP_BYTES);
       if (!picked) return;
