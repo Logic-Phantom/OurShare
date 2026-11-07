@@ -14,7 +14,7 @@
 | 가격 | 무료, 광고 없음, 인앱 결제 없음 |
 | 배포 국가 | 대한민국 |
 | 지원 이메일 | `EXPO_PUBLIC_SUPPORT_EMAIL` 값 (미정) |
-| 개인정보처리방침 URL | `https://logic-phantom.github.io/OurShare/legal/privacy.html` (페이지 생성·Pages 공개 후) |
+| 개인정보처리방침 URL | Play Console에는 `https://logic-phantom.github.io/OurShare/legal/privacy` (같은 페이지, 2026-11-07 재검사용으로 바꿔 저장) |
 | 지원 URL (App Store 필수) | `https://logic-phantom.github.io/OurShare/legal/` 또는 저장소 주소 |
 | 계정 삭제 URL (Play) | `https://logic-phantom.github.io/OurShare/legal/account-deletion.html` |
 
@@ -133,7 +133,7 @@
 |---|---|
 | 금융 기능 | 금융 기능 없음 |
 | 건강 앱 | 건강 기능 없음 |
-| 판매자 상태 | **판매자(개발자 계정 상태 상속)**. 계정이 이미 판매자로 선언돼 있어 앱만 비판매자로 바꾸지 않음. 서비스 약관 URL `legal/terms.html` |
+| 판매자 상태 | **2026-11-07 소유자 결정으로 계정을 비판매자로 변경, 앱은 계정 상태를 따름.** 처음 제출 때는 판매자(개발자 계정 상태 상속). 계정이 이미 판매자로 선언돼 있어 앱만 비판매자로 바꾸지 않음. 서비스 약관 URL `legal/terms.html` |
 | 콘텐츠 등급 | 카테고리 "다른 모든 앱 유형". 사용자 간 상호작용 예, **사용자 공유 콘텐츠가 주요 출처 예**(일정·집안일 이름을 구성원이 직접 입력), 초대된 사람으로만 제한 예, 차단·신고·채팅 조정 없음, 그 밖은 모두 아니요 → **대한민국 12세 이상**, IARC 12+, ESRB 청소년, PEGI 보호자 지도, 상호작용 요소 "사용자 상호작용". 지나친 진술보다 높은 등급이 안전하다고 판단 |
 | 타겟층 | 만 18세 이상만 |
 | 데이터 보안 | 수집함, 전송 중 암호화 예, 계정 생성 방법 **"기타: 함께 쓰기를 켤 때만 익명 계정 자동 생성"**, 계정 삭제 URL `legal/account-deletion.html`, 계정 삭제 없이 일부 데이터 삭제 요청 아니요. 이름·사용자 ID·기타 사용자 제작 콘텐츠: 수집, 임시 처리 아님, 선택(사용자가 고를 수 있음), 공유 안 함. 목적은 모두 앱 기능, 사용자 ID는 사기 예방·보안 추가 |
